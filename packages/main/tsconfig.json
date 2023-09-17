@@ -6,6 +6,8 @@
     "moduleResolution": "Node",
     "skipLibCheck": true,
     "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": false,
     "isolatedModules": true,
     "types": ["node"],
     "baseUrl": ".",

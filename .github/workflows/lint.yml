@@ -10,7 +10,7 @@ on:
       - '**.mts'
       - '**.cts'
       - '**.tsx'
-      - '**.svelte'
+      - '**.vue'
       - '**.json'
   pull_request:
     paths:
@@ -22,7 +22,7 @@ on:
       - '**.mts'
       - '**.cts'
       - '**.tsx'
-      - '**.svelte'
+      - '**.vue'
       - '**.json'
 
 concurrency:
@@ -41,7 +41,6 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16 # Need for npm >=7.7
           cache: 'npm'
 
       - run: npm ci
@@ -58,8 +57,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16 # Need for npm >=7.7
           cache: 'npm'
 
       - run: npm i prettier
-      - run: npx prettier --check "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,svelte,json}"
+      - run: npx prettier --check "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,json}"

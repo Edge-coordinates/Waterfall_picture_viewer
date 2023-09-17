@@ -1,5 +1,6 @@
 **/node_modules
 **/dist
+**/*.svg
 
 package.json
 package-lock.json
@@ -7,11 +8,3 @@ package-lock.json
 
 .github
 .idea
-
-.DS_Store
-/build
-/.svelte-kit
-/package
-.env
-.env.*
-!.env.example

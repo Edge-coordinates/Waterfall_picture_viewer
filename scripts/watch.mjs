@@ -3,6 +3,12 @@
 import {build, createServer} from 'vite';
 import electronPath from 'electron';
 import {spawn} from 'child_process';
+import {fileURLToPath} from 'url';
+import {join} from 'node:path';
+
+process.chdir("packages/renderer")
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 /** @type 'production' | 'development'' */
 const mode = (process.env.MODE = process.env.MODE || 'development');
@@ -25,7 +31,7 @@ function setupMainPackageWatcher({resolvedUrls}) {
   return build({
     mode,
     logLevel,
-    configFile: 'packages/main/vite.config.js',
+    configFile: '../main/vite.config.js',
     build: {
       /**
        * Set to {} to enable rollup watcher
@@ -47,6 +53,7 @@ function setupMainPackageWatcher({resolvedUrls}) {
           /** Spawn new electron process */
           electronApp = spawn(String(electronPath), ['--inspect', '.'], {
             stdio: 'inherit',
+            cwd: join(__dirname, '../')
           });
 
           /** Stops the watch script when the application has been quit */
@@ -67,7 +74,7 @@ function setupPreloadPackageWatcher({ws}) {
   return build({
     mode,
     logLevel,
-    configFile: 'packages/preload/vite.config.js',
+    configFile: '../preload/vite.config.js',
     build: {
       /**
        * Set to {} to enable rollup watcher
