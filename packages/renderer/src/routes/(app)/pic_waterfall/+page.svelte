@@ -14,6 +14,7 @@
 	function refreshpic(event) {
 		console.log('update gallery.' + cntt++);
 		const gallery: any = new Viewer(<HTMLElement>document.getElementById('pic-wrapper'), {
+			navbar: 0,
 			toolbar: {
 				zoomIn: 3,
 				zoomOut: 3,
@@ -55,6 +56,8 @@
 		rootPath = null;
 		refreshLayout = null;
 		const gallery = null;
+		page = 0,
+		pagenum = 0;
 		// console.log(allitems, items, rootPath, refreshLayout);
 	}
 
