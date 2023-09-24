@@ -1,4 +1,5 @@
-import {app, protocol} from 'electron';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {app, protocol, ipcMain} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 import {platform} from 'node:process';
@@ -92,4 +93,41 @@ app.whenReady().then(() => {
     const url = request.url.substring(7);
     callback(decodeURI(path.normalize(url)));
   });
+});
+
+import Store from 'electron-store';
+
+const schema: any = {
+  itemNum: {
+    type: 'number',
+		maximum: 10000,
+		minimum: 1,
+		default: 50,
+  },
+  viewer_navbar: {
+    type: 'number',
+		maximum: 5,
+		minimum: 0,
+		default: 0,
+  },
+	foo: {
+		type: 'number',
+		maximum: 100,
+		minimum: 1,
+		default: 50,
+	},
+	bar: {
+		type: 'string',
+		format: 'url',
+	},
+};
+
+const store = new Store({schema});
+
+// IPC listener
+ipcMain.on('getStore', async (event, val) => {
+  event.returnValue = store.get(val);
+});
+ipcMain.on('setStore', async (event, key, val) => {
+  store.set(key, val);
 });

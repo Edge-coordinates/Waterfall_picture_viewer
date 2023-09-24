@@ -7,9 +7,11 @@
     "skipLibCheck": true,
     "strict": true,
     "isolatedModules": true,
+    "allowSyntheticDefaultImports":true,
+    "noImplicitAny": false,
     "types": ["node"],
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "../../types/**/*.d.ts"],
+  "include": ["src/**/*.ts", "../../types/**/*.d.ts", "src/store.js"],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

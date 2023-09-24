@@ -4,7 +4,7 @@
   <div>刷新请点击右下角的 <kbd class="kbd kbd-md"><i class="gg-edit-unmask" /></kbd> 图标</div>
   <!-- svelte-ignore a11y-missing-attribute -->
   <img src="/9a5f20df641ed9a04f9dab01222541e1.jpeg" />
-  <div>开源地址：<a class='link link-hover text-blue-600' href='https://github.com/Edge-coordinates/Waterfall_picture_viewer'>https://github.com/Edge-coordinates/Waterfall_picture_viewer</a></div>
+  <div>开源地址/文档：<a class='link link-hover text-blue-600' href='https://github.com/Edge-coordinates/Waterfall_picture_viewer'>https://github.com/Edge-coordinates/Waterfall_picture_viewer</a></div>
 </div>
 
 <style>

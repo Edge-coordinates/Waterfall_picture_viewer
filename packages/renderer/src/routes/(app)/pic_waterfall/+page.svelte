@@ -1,20 +1,24 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import Masonry from '/@/components/Masonry.svelte';
 	import Viewer from 'viewerjs';
 	import { imageRetrieval } from './traverseFolder';
+
+	import { item_num, viewer_navbar } from '/@/store/stores';
+
 	let rootPath: any = null;
 	let allitems: any[] = [],
 		items: any[] = []; // 实现分页
 	let itemNum = 150,
 		page = 0,
-		pagenum = 0;
+		pagenum = 0,
+		isNavbar;
 	let refreshLayout;
 	let cntt = 0;
 	function refreshpic(event) {
 		console.log('update gallery.' + cntt++);
 		const gallery: any = new Viewer(<HTMLElement>document.getElementById('pic-wrapper'), {
-			navbar: 0,
+			navbar: isNavbar,
 			toolbar: {
 				zoomIn: 3,
 				zoomOut: 3,
@@ -33,18 +37,8 @@
 
 				info: function () {
 					// console.log('info');
-					alert('以后再做的文件详细信息展示')
+					alert('以后再做的文件详细信息展示');
 				}
-			},
-			shown(event) {
-				const svgText = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" color="#F8F8FF" xmlns="http://www.w3.org/2000/svg"><path d="M11 10.9794C11 10.4271 11.4477 9.97937 12 9.97937C12.5523 9.97937 13 10.4271 13 10.9794V16.9794C13 17.5317 12.5523 17.9794 12 17.9794C11.4477 17.9794 11 17.5317 11 16.9794V10.9794Z" fill="currentColor" /><path d="M12 6.05115C11.4477 6.05115 11 6.49886 11 7.05115C11 7.60343 11.4477 8.05115 12 8.05115C12.5523 8.05115 13 7.60343 13 7.05115C13 6.49886 12.5523 6.05115 12 6.05115Z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12Z" fill="currentColor" /></svg>`;
-				const parser = new DOMParser();
-				// 解析 SVG 文本为 DOM 元素
-				const svgElement: any = parser.parseFromString(svgText, 'image/svg+xml').querySelector('svg');
-				const viewerInfo = document.querySelector('.viewer-info');
-				viewerInfo?.appendChild(svgElement);
-				// console.log(viewerInfo);
-				// console.log(viewerInfo);
 			}
 		});
 		console.log(gallery);
@@ -56,10 +50,17 @@
 		rootPath = null;
 		refreshLayout = null;
 		const gallery = null;
-		page = 0,
-		pagenum = 0;
+		(page = 0), (pagenum = 0);
 		// console.log(allitems, items, rootPath, refreshLayout);
 	}
+
+	const unsubscribe_itemNum = item_num.subscribe((value) => {
+		itemNum = value;
+	});
+	const unsubscribe_viewer_navbar = viewer_navbar.subscribe((value) => {
+		if (value) isNavbar = 1;
+		else isNavbar = 0;
+	});
 
 	onMount(() => {
 		// items = imageRetrieval(rootPath);
@@ -85,6 +86,11 @@
 				}
 			}
 		});
+	});
+
+	onDestroy(() => {
+		unsubscribe_itemNum();
+		unsubscribe_viewer_navbar();
 	});
 
 	function handleClickres(event) {
@@ -189,11 +195,5 @@
 		right: 10px; /* 距离窗口右侧的距离为0 */
 		/* background-color: lightblue;
     padding: 10px; */
-	}
-	.viewer-info {
-		color: #fff;
-		font-size: 0.75rem;
-		line-height: 1.5rem;
-		text-align: center;
 	}
 </style>

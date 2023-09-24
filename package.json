@@ -1,7 +1,7 @@
 {
   "name": "waterfall_picture_viewer",
   "description": "瀑布流图片查看器",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "author": {
     "email": "edgecoordinates@gmail.com",
@@ -72,6 +72,7 @@
   },
   "dependencies": {
     "electron-serve": "^1.1.0",
+    "electron-store": "^8.1.0",
     "electron-updater": "6.1.1",
     "opn": "^6.0.0"
   }

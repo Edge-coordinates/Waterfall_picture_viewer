@@ -1,6 +1,6 @@
-import * as fs from 'fs'
+import * as fs from 'fs';
 
-export function isPathDirectory(thepath: string) {
-    const thefile = fs.statSync(thepath);
-    return thefile.isDirectory()
+export function isPathDirectory (thepath: string) {
+  const thefile = fs.statSync(thepath);
+  return thefile.isDirectory();
 }
