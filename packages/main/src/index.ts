@@ -122,7 +122,8 @@ const schema: any = {
 	},
 };
 
-const store = new Store({schema});
+const store = new Store();
+if(!store.get('itemNum'))store.store = schema;
 
 // IPC listener
 ipcMain.on('getStore', async (event, val) => {
