@@ -35,7 +35,8 @@
 ## 使用示例
 
 ### 其一
-[![使用教程](https://i.postimg.cc/Vv04083N/100.gif)](https://postimg.cc/ctZfPV1q)
+![使用教程](https://i.postimg.cc/Vv04083N/100.gif)  
+**[TG preview link](https://t.me/edge_wasteland/4955)** **[GIF preview link](https://postimg.cc/ctZfPV1q)**
 
 ### For NSFW Use
 **[TG preview link](https://t.me/edge_wasteland/4939)**
