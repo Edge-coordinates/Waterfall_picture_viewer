@@ -1,4 +1,6 @@
-<script lang="ts">
+<script>
+// @ts-nocheck
+
   import {versions} from '#preload';
 </script>
 

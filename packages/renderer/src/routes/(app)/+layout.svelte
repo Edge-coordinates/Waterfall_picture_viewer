@@ -1,6 +1,5 @@
 <script>
 // @ts-nocheck
-
     import ExpandMenu from "./expandMenu.svelte";
     import SettingModel from "./SettingModel.svelte";
     import InitData from "./initData.svelte";

@@ -3,6 +3,7 @@
 	import Masonry from '/@/components/Masonry.svelte';
 	import Viewer from 'viewerjs';
 	import { imageRetrieval } from './traverseFolder';
+	import {sha256sum, isPathDirectory} from '#preload'
 
 	import { item_num, viewer_navbar } from '/@/store/stores';
 
@@ -79,6 +80,7 @@
 					// console.log('已拖放文件夹:', files[0].path); // 文件夹路径
 					rootPath = files[0].path;
 					allitems = imageRetrieval(rootPath);
+					console.log(isPathDirectory(rootPath))
 					// ---------------- 初始化数据
 					pagenum = Math.ceil(allitems.length / itemNum);
 					items = allitems.slice(page * itemNum, (page + 1) * itemNum);

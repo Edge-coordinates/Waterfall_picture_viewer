@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import fs from 'fs-extra';
 
 export function isPathDirectory (thepath: string) {
   const thefile = fs.statSync(thepath);

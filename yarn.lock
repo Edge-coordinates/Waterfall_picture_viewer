@@ -2072,6 +2072,15 @@ fs-extra@^10.0.0, fs-extra@^10.1.0:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fs-extra@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.1.tgz#da69f7c39f3b002378b0954bb6ae7efdc0876e2d"
+  integrity sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
 fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
@@ -2689,6 +2698,13 @@ loupe@^2.3.1, loupe@^2.3.6:
   integrity sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==
   dependencies:
     get-func-name "^2.0.0"
+
+lowdb@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/lowdb/-/lowdb-6.1.1.tgz#fb3c66a116b0ef799641f677676071661f6804f4"
+  integrity sha512-HO13FCxI8SCwfj2JRXOKgXggxnmfSc+l0aJsZ5I34X3pwzG/DPBSKyKu3Zkgg/pNmx854SVgE2la0oUeh6wzNw==
+  dependencies:
+    steno "^3.1.1"
 
 lowercase-keys@^2.0.0:
   version "2.0.0"
@@ -3605,6 +3621,11 @@ std-env@^3.3.3:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/std-env/-/std-env-3.4.3.tgz#326f11db518db751c83fd58574f449b7c3060910"
   integrity sha512-f9aPhy8fYBuMN+sNfakZV18U39PbalgjXG3lLB9WkaYTxijru61wb57V9wxxNthXM5Sd88ETBWi29qLAsHO52Q==
+
+steno@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/steno/-/steno-3.1.1.tgz#713dad214ec673f7a3cbb7c0f318dba4be398490"
+  integrity sha512-B7c6EVH7oEiaMRW36SjUnktkDwp/qd4pQiduylyiqvcZEZDeX0IIFZRBZdwO/RaVo60M0wkDwC0e8yeKaR4VGg==
 
 streamsearch@^1.1.0:
   version "1.1.0"

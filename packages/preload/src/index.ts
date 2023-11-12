@@ -10,7 +10,7 @@ import * as path from 'path';
 export {sha256sum} from './nodeCrypto';
 export {versions} from './versions';
 export {isPathDirectory} from './filetools';
-// export {myStore} from './store';
+export {tmaindb} from './jsondb';
 export {fs, path};
 
 import {contextBridge, ipcRenderer, IpcRendererEvent} from 'electron';
