@@ -1,5 +1,7 @@
 # waterfall_picture_viewer 瀑布流图片查看器
 
+**因为个人原因，本项目会暂停维护6个月左右，之前列出的功能，六个月之后都会一一实现（会彻底重构一次），诸位不用着急！谢谢包涵！**
+
 瀑布流图片查看器，可以遍历文件夹和所有子文件夹并读取其中的全部图片，对于每个文件夹下的图片按照名称排序展示。
 如果图片过多，会按照 定制数量（默认50张图片）/一页进行拆分，支持页面跳转，翻页。
 
@@ -35,9 +37,6 @@
 ### 其一
 ![使用教程](https://i.postimg.cc/Vv04083N/100.gif)  
 **[TG preview link](https://t.me/edge_wasteland/4955)** **[GIF preview link](https://postimg.cc/ctZfPV1q)**
-
-### For NSFW Use
-**[TG preview link](https://t.me/edge_wasteland/4939)**
 
 ## 致歉
 
