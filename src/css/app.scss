@@ -1,0 +1,15 @@
+// app global css in SCSS form
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: rgba(18, 100, 253, 0);
+}
+
+#win {
+  text-align: center;
+  background-color: #fffae8;
+  box-shadow: 8px 8px 10px grey;
+  -webkit-app-region: drag;
+}
