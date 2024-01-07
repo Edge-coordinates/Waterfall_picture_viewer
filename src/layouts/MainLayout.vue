@@ -96,7 +96,7 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
     </q-header>
 
 
-    <q-page-container class="h-full">
+    <q-page-container style="margin-top: 30px;">
       <router-view />
     </q-page-container>
   </q-layout>
