@@ -1,10 +1,10 @@
 <template>
-  <q-page>
-    <div class="row items-center justify-evenly">
+  <q-page style="margin-top: 20px;">
+    <!-- <div class="row items-center justify-evenly">
       <router-link to="/test" class="btn">Go to Test</router-link>
       <button class="btn" @click="querydb">Button</button>
       <button class="btn" @click="picInfoInit">Button</button>
-    </div>
+    </div> -->
     <div v-if="ifImgPreOK" class="h-full">
       <water-fall :imgs="imgs"></water-fall>
       <!-- <water-fall /> -->
@@ -30,13 +30,14 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab icon="add" active-icon="close" direction="up" color="accent">
         <q-fab-action @click="stateInitialization" color="primary" icon="refresh" />
-        <q-fab-action @click="querydb" color="primary" icon="settings" />
+        <q-fab-action @click="openSetModal" color="primary" icon="settings" />
       </q-fab>
     </q-page-sticky>
-
   </q-page>
+  <set-component />
 </template>
 
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { NUpload, NUploadDragger, NConfigProvider, NP, NText } from 'naive-ui'
 import { zhCN, dateZhCN } from 'naive-ui'
@@ -45,16 +46,26 @@ import { ref } from 'vue'
 import type { UploadInst } from 'naive-ui'
 
 import WaterFall from 'components/WaterFall.vue'
+import SetComponent from 'components/SetComponent.vue'
 
 const upload = ref<UploadInst | null>()
 const ifImgPreOK = ref<boolean>(false)
-const imgs = ref({})
+const imgs = ref([])
 
+import { useSettingStore } from 'stores/viewerSet-store';
+const setStore = useSettingStore()
+
+
+function openSetModal() {
+  setStore.isOpen = true
+  console.log(setStore.isOpen)
+}
 
 function stateInitialization() {
   upload.value?.clear()
-  imgs.value = {}
+  imgs.value = []
   ifImgPreOK.value = false
+  console.log(imgs.value)
 }
 
 async function querydb() {
@@ -70,7 +81,7 @@ async function querydb() {
 async function picInfoInit(fpath) {
   console.log('picInfoInit')
   imgs.value = await window.myToolAPI.traverseFolder(fpath)
-  console.log(imgs.value)
+  // console.log(imgs.value)
   ifImgPreOK.value = true
 }
 

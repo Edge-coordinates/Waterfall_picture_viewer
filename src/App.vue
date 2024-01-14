@@ -26,3 +26,7 @@ const themeOverrides = {
   // }
 }
 </script>
+
+<style lang="scss">
+@import 'assets/font-awesome-6.4.2-pro.css'
+</style>

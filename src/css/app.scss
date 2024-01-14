@@ -13,3 +13,64 @@ body {
   box-shadow: 8px 8px 10px grey;
   -webkit-app-region: drag;
 }
+
+/*滚动条*/
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: #cccccc;
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background-color: #999999;
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  width: 5px;
+  background-color: #cccccc;
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+::-webkit-scrollbar-track-piece:no-button {
+}
+::-webkit-scrollbar-thumb {
+  background-color: #3994ef;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a4eef0;
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: #666;
+}
+::-webkit-scrollbar-button:vertical {
+  width: 9px;
+}
+::-webkit-scrollbar-button:horizontal {
+  width: 9px;
+}
+::-webkit-scrollbar-button:vertical:start:decrement {
+  background-color: white;
+}
+::-webkit-scrollbar-button:vertical:end:increment {
+  background-color: white;
+}
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background-color: white;
+}
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background-color: white;
+}
+body::-webkit-scrollbar-track-piece {
+  background-color: white;
+}

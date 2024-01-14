@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { schema } from './default-data';
 
@@ -34,5 +34,10 @@ export function ipcMains (value: void): any {
   ipcMain.handle('tool-traverseFolder', (event, path) => {
     console.log(path);
     return imageRetrieval(path);
+  });
+
+  ipcMain.handle('tool-openLink', (event, link) => {
+    console.log(link);
+    return shell.openExternal(link);
   });
 }

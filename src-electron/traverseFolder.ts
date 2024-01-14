@@ -8,7 +8,7 @@ import * as path from 'path';
 const rootPath = 'D:\\Picture\\五维介质';
 
 // 存储图片文件链接的数组
-const imageLinks: any[] = [];
+let imageLinks: any[] = [];
 
 // 递归遍历文件夹
 export function traverseFolder (currentPath) {
@@ -52,6 +52,8 @@ function isPathDirectory (thepath: string) {
 }
 
 export function imageRetrieval (thepath) {
+  // 清空
+  imageLinks = [];
   traverseFolder(thepath);
   return imageLinks;
 }

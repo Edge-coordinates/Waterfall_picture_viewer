@@ -47,6 +47,7 @@ export type myWindowAPI = {
 
 export type myToolAPI = {
   traverseFolder: (path: string) => any;
+  openLink: (link: string) => any;
 };
 
 import { contextBridge, ipcRenderer } from 'electron';
@@ -57,6 +58,9 @@ import { BrowserWindow } from '@electron/remote';
 const myToolAPIs: myToolAPI = {
   async traverseFolder (path) {
     return await ipcRenderer.invoke('tool-traverseFolder', path);
+  },
+  async openLink (link) {
+    return await ipcRenderer.invoke('tool-openLink', link);
   }
 };
 

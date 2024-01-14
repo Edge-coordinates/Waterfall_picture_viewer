@@ -47,11 +47,11 @@ module.exports = {
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-files
     // required to lint *.vue files
     'vue'
-    
+
     // https://github.com/typescript-eslint/typescript-eslint/issues/389#issuecomment-509292674
     // Prettier has not been included as plugin to avoid performance impact
     // add it as an extension for your IDE
-    
+
   ],
 
   globals: {
@@ -69,8 +69,7 @@ module.exports = {
 
   // add your custom rules here
   rules: {
-    
-    'prefer-promise-reject-errors': 'off',
+    'reportUnusedDisableDirectives': 0,
 
     quotes: ['warn', 'single', { avoidEscape: true }],
 

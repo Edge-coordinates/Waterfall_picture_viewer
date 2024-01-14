@@ -10,7 +10,7 @@
       <div>
         <h1 class="text-5xl font-bold">About Author</h1>
         <p class="text-subtitle2 text-xl">边缘坐标是也！</p>
-        <button @click="openLink" class="btn btn-primary">GitHub</button>
+        <button @click="openLink('https://github.com/Edge-coordinates')" class="btn btn-primary">GitHub</button>
       </div>
     </div>
   </div>
@@ -20,7 +20,8 @@
 <script lang="ts" setup>
 // import { shell } from 'electron'
 // import * as fs from 'fs'
-function openLink(e: any) {
-  console.log(e)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function openLink(link: string) {
+  window.myToolAPI.openLink(link)
 }
 </script>

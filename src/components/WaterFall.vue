@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-unused-vars -->
 <template>
-  <div class="page-b-content">
+  <div id="pic-wrapper" class="page-b-content" v-viewer="viewerConfig">
     <Waterfall :list="list" :row-key="options.rowKey" :gutter="options.gutter"
       :has-around-gutter="options.hasAroundGutter" :width="options.width" :breakpoints="options.breakpoints"
       :img-selector="options.imgSelector" :background-color="options.backgroundColor" :lazyload="options.lazyload"
@@ -20,26 +20,42 @@
         </div>
       </template>
     </Waterfall>
-
-    <div class="page-menus">
-      <p v-for="pg in pages" :key="pg" class="page-menus__item" :class="{ active: pg === page }"
-        @click="handleChangePage(pg)">
-        {{ pg }}
-      </p>
-    </div>
   </div>
+
+  <q-page-sticky position="bottom-left" :offset="[18, 18]">
+    <!-- 样式调整！！！！ -->
+    <div class="q-pa-lg rounded-full bg-blue-300 bg-opacity-70">
+      <q-pagination v-model="page" color="black" :max="pageNum" :max-pages="8" boundary-numbers></q-pagination>
+      <div class="row inline">
+        <n-input-number v-model:value="inputPageValue" clearable /> <q-btn @click="handleChangePage" color="black"
+          label="Go" /> <q-btn @click="handleLoadMore()" color="black" icon="autorenew" />
+      </div>
+    </div>
+  </q-page-sticky>
 </template>
 
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-import { onMounted, reactive, ref, computed } from 'vue'
+import { NInputNumber } from 'naive-ui'
+import { onMounted, reactive, ref, computed, watch } from 'vue'
 import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 // 重新处理
-import type { ViewCard } from './waterfall'
+// import type { ViewCard } from './waterfall'
 import 'vue-waterfall-plugin-next/dist/style.css'
 
+import { useSettingStore } from 'stores/viewerSet-store';
+const setStore = useSettingStore()
+
 const props = defineProps({
-  imgs: Object
+  imgs: {
+    type: Array,
+    default(rawProps) {
+      return []
+    }
+  }
 })
+const inputPageValue = ref(1)
 
 // const list = computed(() => {
 
@@ -53,7 +69,7 @@ import loading from '/loading.png'
 import error from '/error.png'
 
 async function getList({ page, pageSize }) {
-  return props.imgs?.map((element) => {
+  return props.imgs?.slice((page - 1) * pageSize, page * pageSize).map((element) => {
     // 对每个元素进行处理，这里简单地将每个元素乘以2
     return {
       src: element,
@@ -62,35 +78,47 @@ async function getList({ page, pageSize }) {
   });
 }
 
+const page = ref(1)
+watch(page, (newVal, oldVal) => {
+  handleLoadMore()
+  if (inputPageValue.value != page.value) inputPageValue.value = page.value
+  if (1) scrollToTop()//滚动到顶部
+  console.log('myVariable changed:', newVal);
+});
+const pageNum = computed(() => {
+  return Math.ceil(props.imgs.length / setStore.perPageNum)
+  // return 10
+})
+const list = ref<any>([])
 
-const useList = function () {
-  const pages = ref([1, 2, 3, 4, 5])
-  const page = ref(1)
-  const list = ref<any>([])
-
-  function handleChangePage(val: number) {
-    page.value = val
-    handleLoadMore()
-  }
-
-  // 加载更多
-  function handleLoadMore() {
-    getList({
-      page: page.value,
-      pageSize: 40,
-    }).then((res) => {
-      list.value = res
-    })
-  }
-
-  return {
-    list,
-    page,
-    pages,
-    handleLoadMore,
-    handleChangePage,
-  }
+function handleChangePage() {
+  console.log(setStore.vNavbar)
+  page.value = inputPageValue.value
+  // handleLoadMore()
 }
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth' // 使用平滑滚动
+  });
+}
+
+// 加载更多
+function handleLoadMore() {
+  getList({
+    page: page.value,
+    pageSize: setStore.perPageNum,
+  }).then((res) => {
+    list.value = res
+  })
+}
+
+// 首次加载
+onMounted(() => {
+  handleLoadMore()
+})
+
 
 const options = reactive({
   // 唯一key值
@@ -103,6 +131,9 @@ const options = reactive({
   width: 320,
   // 自定义行显示个数，主要用于对移动端的适配
   breakpoints: {
+    1400: {
+      rowPerView: 5,
+    },
     1200: {
       // 当屏幕宽度小于等于1200
       rowPerView: 4,
@@ -123,7 +154,7 @@ const options = reactive({
   // 动画延迟
   animationDelay: 300,
   // 背景色
-  backgroundColor: '#2C2E3A',
+  backgroundColor: '#FFFFFF',
   // imgSelector
   imgSelector: 'src',
   // 加载配置
@@ -132,24 +163,46 @@ const options = reactive({
     error,
   },
   // 是否懒加载
-  lazyload: true,
-  crossOrigin: true,
+  lazyload: false,
+  crossOrigin: false,
 })
 
-const {
-  list,
-  page,
-  pages,
-  handleLoadMore,
-  handleChangePage,
-} = useList()
+import 'viewerjs/dist/viewer.css'
+import { directive as viewer } from "v-viewer"
+const vViewer = viewer({
+  debug: true,
+})
 
-onMounted(() => {
-  handleLoadMore()
+let viewerConfig = reactive({
+  navbar: setStore.vNavbar,
+  toolbar: {
+    zoomIn: 3,
+    zoomOut: 3,
+    oneToOne: 2,
+    reset: 2,
+    prev: 2,
+    play: {
+      show: 2,
+      size: 'large'
+    },
+    next: 2,
+    rotateLeft: 2,
+    rotateRight: 2,
+    flipHorizontal: 2,
+    flipVertical: 2,
+
+    info: function () {
+      // console.log('info');
+      alert('以后再做的文件详细信息展示');
+    }
+  }
 })
 
 function imageLoad(url: string) {
   console.log(`${url}: 加载完成`)
+  // console.log('update gallery.' + cntt++);
+  // gallery = new Viewer(<HTMLElement>document.getElementById('pic-wrapper'), viewerConfig);
+  // console.log(gallery);
 }
 
 function imageError(url: string) {
@@ -161,10 +214,22 @@ function imageSuccess(url: string) {
 }
 </script>
 
-<style scoped>
-.page-b-content {
+<style>
+.viewer-info {
+  color: #fff;
+  font-family: FontAwesome, serif;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  text-align: center;
+}
+
+.viewer-info::before {
+  content: "\f129";
+}
+
+/* .page-b-content {
   padding: 20px;
-  background-color: #2C2E3A;
+  background-color: #ffffff;
 }
 
 .page-menus {
@@ -178,18 +243,18 @@ function imageSuccess(url: string) {
   height: 30px;
   border-radius: 50%;
   border: 2px solid #e7e7e7;
-  background-color: #fff;
+  background-color: #ffffff;
   margin-bottom: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   font-size: 14px;
-  color: #666;
+  color: #ffffff;
 }
 
 .page-menus__item.active {
   background-color: #e75932;
-  color: #fff;
-}
+  color: #ffffff;
+} */
 </style>

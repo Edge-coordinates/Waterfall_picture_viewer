@@ -84,6 +84,9 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
               <q-item clickable>
                 <q-item-section><router-link to="/about">About</router-link></q-item-section>
               </q-item>
+              <q-item clickable>
+                <q-item-section><router-link to="/test">TEST</router-link></q-item-section>
+              </q-item>
             </q-list>
           </q-menu>
         </div>
@@ -96,7 +99,7 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
     </q-header>
 
 
-    <q-page-container style="margin-top: 30px;">
+    <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
