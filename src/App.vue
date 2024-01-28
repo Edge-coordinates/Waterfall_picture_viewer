@@ -10,6 +10,19 @@
 // window.storeAPI.initData()
 import { NConfigProvider } from 'naive-ui'
 
+import { onMounted } from 'vue'
+
+import { useSettingStore } from 'stores/viewerSet-store';
+const setStore = useSettingStore()
+async function initData() {
+  setStore.perPageNum = await window.storeAPI.get('itemNum')
+  console.log('setData inited!')
+}
+
+onMounted(() => {
+  initData()
+})
+
 const themeOverrides = {
   common: {
     primaryColor: '#1976d2'
@@ -26,7 +39,3 @@ const themeOverrides = {
   // }
 }
 </script>
-
-<style lang="scss">
-@import 'assets/font-awesome-6.4.2-pro.css'
-</style>

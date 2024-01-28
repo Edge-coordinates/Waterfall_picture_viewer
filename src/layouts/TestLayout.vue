@@ -9,53 +9,10 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
         <q-icon name="mdi-view-dashboard"></q-icon>
         <div class="font-bold">Img View</div>
         <div class="cursor-pointer non-selectable q-electron-drag--exception">
-          File
-          <q-menu>
-            <q-list dense style="min-width: 100px">
-              <q-item clickable v-close-popup>
-                <q-item-section>Open...</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>所有按键均没有功能</q-item-section>
-              </q-item>
-
-              <q-separator></q-separator>
-
-              <q-item clickable>
-                <q-item-section>Preferences</q-item-section>
-                <q-item-section side>
-                  <q-icon name="mdi-chevron-right"></q-icon>
-                </q-item-section>
-
-                <q-menu anchor="top end" self="top start">
-                  <q-list>
-                    <q-item v-for="n in 3" :key="n" dense clickable>
-                      <q-item-section>Submenu Label</q-item-section>
-                      <q-item-section side>
-                        <q-icon name="mdi-chevron-right"></q-icon>
-                      </q-item-section>
-                      <q-menu auto-close anchor="top end" self="top start">
-                        <q-list>
-                          <q-item v-for="n in 3" :key="n" dense clickable>
-                            <q-item-section>3rd level Label</q-item-section>
-                          </q-item>
-                        </q-list>
-                      </q-menu>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-item>
-
-              <q-separator></q-separator>
-
-              <q-item clickable v-close-popup @click="closeApp">
-                <q-item-section>Quit</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
+          <router-link to="/">Home</router-link>
         </div>
 
-        <div class="q-ml-md cursor-pointer non-selectable q-electron-drag--exception">
+        <!--     <div class="q-ml-md cursor-pointer non-selectable q-electron-drag--exception">
           Edit
           <q-menu auto-close>
             <q-list dense style="min-width: 100px">
@@ -74,7 +31,7 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
               </q-item>
             </q-list>
           </q-menu>
-        </div>
+        </div> -->
         <div class="cursor-pointer gt-xs">View</div>
         <div class="cursor-pointer q-electron-drag--exception">
           Window
@@ -96,9 +53,9 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
               <q-item clickable>
                 <q-item-section><router-link to="/about">About</router-link></q-item-section>
               </q-item>
-              <!-- <q-item clickable>
+              <q-item clickable>
                 <q-item-section><router-link to="/test">TEST</router-link></q-item-section>
-              </q-item> -->
+              </q-item>
             </q-list>
           </q-menu>
         </div>

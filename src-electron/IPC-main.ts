@@ -31,9 +31,9 @@ export function ipcMains (value: void): any {
     return store.set(key, value);
   });
 
-  ipcMain.handle('tool-traverseFolder', (event, path) => {
-    console.log(path);
-    return imageRetrieval(path);
+  ipcMain.handle('tool-traverseFolder', (event, path, pFormats) => {
+    console.log(path, pFormats);
+    return imageRetrieval(path, pFormats);
   });
 
   ipcMain.handle('tool-openLink', (event, link) => {

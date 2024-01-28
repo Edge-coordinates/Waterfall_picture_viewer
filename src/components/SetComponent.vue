@@ -1,14 +1,15 @@
+<!-- eslint-disable quotes -->
 <template>
   <q-dialog v-model="setStore.isOpen">
     <q-card class="!max-w-none w-4/5 h-4/5">
       <q-toolbar>
         <q-avatar>
-          <q-icon name="settings" color="blue" size="2em" />
+          <q-icon name="mdi-cogs" color="blue" size="2em" />
         </q-avatar>
 
         <q-toolbar-title><span class="text-weight-bold">设置</span> Setting</q-toolbar-title>
 
-        <q-btn flat round dense icon="close" v-close-popup />
+        <q-btn flat round dense icon="mdi-close" v-close-popup />
       </q-toolbar>
 
       <div>
@@ -26,9 +27,37 @@
             <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">
               <q-tab-panel name="mails">
                 <div class="text-h4 q-mb-md">基础设置</div>
-                <q-input v-model="simpleSetData.perPageNum" :label="'每页展示图片数目 当前:' + setStore.perPageNum + '/页'" />
-                <q-input disable v-model="simpleSetData.imageFormat" label="支持的格式" />
-                <div>是否开启图片查看器画廊：<q-toggle disable v-model="simpleSetData.vNavbar" /></div>
+                <q-input v-model="simpleSetData.perPageNum" :label="'每页展示图片数目 当前:' + setStore.perPageNum + '/页'">
+                  <template v-slot:after>
+                    <q-btn round dense flat icon="mdi-content-save" @click="saveData('perPageNum')"><q-tooltip
+                        class="bg-purple text-body2" :offset="[10, 10]">
+                        保存设置
+                      </q-tooltip></q-btn>
+                  </template>
+                </q-input>
+                <q-input spellcheck="false" v-model="simpleSetData.imageFormat" label="支持的格式" style="font-weight:bold;">
+                  <template v-slot:after>
+                    <q-btn disable round dense flat icon="mdi-content-save" @click="saveData('imageFormat')"><q-tooltip
+                        class="bg-purple text-body2" :offset="[10, 10]">
+                        保存设置
+                      </q-tooltip></q-btn>
+                  </template>
+                </q-input>
+                <!-- <div>是否开启图片查看器画廊：<q-toggle disable v-model="simpleSetData.vNavbar" /></div> -->
+                <div>
+                  <br />
+                  <q-list separator>
+                    <q-item v-ripple>
+                      <q-item-section>保存意味着存储，会影响之后使用软件</q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-ripple>
+                      <q-item-section>
+                        <q-item-label>临时使用没有任何副作用，仅会影响本次的体验！</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </div>
               </q-tab-panel>
 
               <q-tab-panel name="alarms">
@@ -51,6 +80,32 @@
                 <p>
                   这上面的夜的天空，奇怪而高，我生平没有见过这样奇怪而高的天空。他仿佛要离开人间而去，使人们仰面不再看见。然而现在却非常之蓝，闪闪地眨着几十个星星的眼，冷眼。他的口角上现出微笑，似乎自以为大有深意，而将繁霜洒在我的园里的野花草上。
                 </p>
+                <q-input bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
+                  <template v-slot:before>
+                    <q-avatar>
+                      <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+                    </q-avatar>
+                  </template>
+
+                  <template v-slot:append>
+                    <q-icon v-if="text !== ''" name="mdi-close" @click="text = ''" class="cursor-pointer" />
+                    <!-- <q-icon name="mdi-schedule" /> -->
+                  </template>
+
+                  <template v-slot:hint>
+                    Field hint
+                  </template>
+
+                  <template v-slot:after>
+                    <q-btn round dense flat icon="mdi-send" />
+                  </template>
+                </q-input>
+
+                <q-input bottom-slots v-model="text" label="Label">
+                  <template v-slot:after>
+                    <q-btn round dense flat icon="mdi-send" />
+                  </template>
+                </q-input>
               </q-tab-panel>
             </q-tab-panels>
           </template>
@@ -58,16 +113,16 @@
       </div>
       <q-card-actions align="right">
         <q-btn flat label="临时使用" @click="updateStore" color="primary" v-close-popup />
-        <q-btn flat label="保存" disable @click="saveData" color="primary" v-close-popup />
+        <!-- <q-btn flat label="保存" disable @click="saveData" color="primary" v-close-popup /> -->
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
-<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+let text, dense
+import { ref, reactive, onMounted } from 'vue'
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
@@ -79,7 +134,12 @@ const simpleSetData = reactive({
 })
 
 const tab = ref('mails')
-const splitterModel = ref(20)
+const splitterModel = ref(20) // 这啥啊？
+
+function checked(a, b) {
+  if (a) return a
+  else return b
+}
 
 function updateStore() {
   if (simpleSetData.perPageNum) setStore.perPageNum = <any>simpleSetData.perPageNum
@@ -89,10 +149,26 @@ function updateStore() {
   console.log(setStore.vNavbar)
 }
 
-function saveData() {
-  console.log('saved!')
+function saveData(id) {
+  console.log('saved!', id)
+  switch (id) {
+    case 'perPageNum':
+      setStore.perPageNum = checked(<any>simpleSetData.perPageNum, setStore.perPageNum)
+      window.storeAPI.set('itemNum', setStore.perPageNum)
+      break;
+  }
 }
+
+onMounted(() => {
+  // document.getElementById('inputFormat')!.style.fontWeight = 'bolder' // 输入框加粗 无效
+})
 
 // const props = defineProps({
 // })
 </script>
+
+<!-- <style>
+input {
+  font-weight: bold;
+}
+</style> -->

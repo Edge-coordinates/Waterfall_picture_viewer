@@ -1,7 +1,7 @@
 {
-  "name": "quasar-project-02",
-  "version": "0.0.1",
-  "description": "A Quasar Project",
+  "name": "waterfall-picture-viewer",
+  "version": "1.0.0",
+  "description": "A simple picture viewer",
   "productName": "Quasar App",
   "author": "边缘坐标 <Edgecoordinates@gmail.com>",
   "private": true,
@@ -16,8 +16,11 @@
   "dependencies": {
     "@electron/remote": "^2.1.1",
     "@quasar/extras": "^1.16.4",
+    "bigger-picture": "^1.1.14",
     "electron-store": "^8.1.0",
     "fs-extra": "^11.2.0",
+    "image-size": "^1.1.1",
+    "photoswipe": "^5.4.3",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
     "v-viewer": "^3.0.13",

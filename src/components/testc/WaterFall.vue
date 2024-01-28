@@ -138,53 +138,51 @@ onUnmounted(() => {
   }
 })
 
-const options = computed(() => {
-  return {
-    // 唯一key值
-    rowKey: 'id',
-    // 卡片之间的间隙
-    gutter: 10,
-    // 是否有周围的gutter
-    hasAroundGutter: true,
-    // 卡片在PC上的宽度
-    width: 320,
-    // 自定义行显示个数，主要用于对移动端的适配
-    breakpoints: {
-      1400: {
-        rowPerView: 5,
-      },
-      1200: {
-        // 当屏幕宽度小于等于1200
-        rowPerView: 4,
-      },
-      800: {
-        // 当屏幕宽度小于等于800
-        rowPerView: 3,
-      },
-      500: {
-        // 当屏幕宽度小于等于500
-        rowPerView: 2,
-      },
+const options = reactive({
+  // 唯一key值
+  rowKey: 'id',
+  // 卡片之间的间隙
+  gutter: 10,
+  // 是否有周围的gutter
+  hasAroundGutter: true,
+  // 卡片在PC上的宽度
+  width: 320,
+  // 自定义行显示个数，主要用于对移动端的适配
+  breakpoints: {
+    1400: {
+      rowPerView: 5,
     },
-    // 动画效果
-    animationEffect: 'animate__fadeInUp',
-    // 动画时间
-    animationDuration: 1000,
-    // 动画延迟
-    animationDelay: 300,
-    // 背景色
-    backgroundColor: '#FFFFFF',
-    // imgSelector
-    imgSelector: 'src',
-    // 加载配置
-    loadProps: {
-      loading,
-      error,
+    1200: {
+      // 当屏幕宽度小于等于1200
+      rowPerView: 4,
     },
-    // 是否懒加载
-    lazyload: false,
-    crossOrigin: false,
-  }
+    800: {
+      // 当屏幕宽度小于等于800
+      rowPerView: 3,
+    },
+    500: {
+      // 当屏幕宽度小于等于500
+      rowPerView: 2,
+    },
+  },
+  // 动画效果
+  animationEffect: 'animate__fadeInUp',
+  // 动画时间
+  animationDuration: 1000,
+  // 动画延迟
+  animationDelay: 300,
+  // 背景色
+  backgroundColor: '#FFFFFF',
+  // imgSelector
+  imgSelector: 'src',
+  // 加载配置
+  loadProps: {
+    loading,
+    error,
+  },
+  // 是否懒加载
+  lazyload: false,
+  crossOrigin: false,
 })
 
 

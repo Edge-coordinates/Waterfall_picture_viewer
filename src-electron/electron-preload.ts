@@ -43,10 +43,11 @@ export type myWindowAPI = {
   minimize: () => Promise<any>;
   toggleMaximize: () => Promise<any>;
   close: () => Promise<any>;
+  openDevTool: () => any;
 };
 
 export type myToolAPI = {
-  traverseFolder: (path: string) => any;
+  traverseFolder: (path: string, pFormats: any) => any;
   openLink: (link: string) => any;
 };
 
@@ -56,8 +57,8 @@ import { BrowserWindow } from '@electron/remote';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 const myToolAPIs: myToolAPI = {
-  async traverseFolder (path) {
-    return await ipcRenderer.invoke('tool-traverseFolder', path);
+  async traverseFolder (path, pFormats) {
+    return await ipcRenderer.invoke('tool-traverseFolder', path, pFormats);
   },
   async openLink (link) {
     return await ipcRenderer.invoke('tool-openLink', link);
@@ -103,5 +104,9 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
 
   close () {
     BrowserWindow.getFocusedWindow()!.close();
+  },
+
+  openDevTool () {
+    BrowserWindow.getFocusedWindow()!.webContents.openDevTools();
   }
 });

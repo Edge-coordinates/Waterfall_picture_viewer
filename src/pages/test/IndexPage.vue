@@ -27,19 +27,6 @@
         </n-upload>
       </n-config-provider>
     </div>
-    <div v-if="!ifImgPreOK">
-      <q-list separator>
-        <q-item v-ripple>
-          <q-item-section>打开图片查看器之后，使用 ctrl + 鼠标滚轮调整图片大小</q-item-section>
-        </q-item>
-
-        <q-item clickable v-ripple>
-          <q-item-section>
-            <q-item-label>图片查看器支持左右快捷键翻页，支持esc快捷键退出</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab icon="mdi-plus" active-icon="mdi-close" direction="up" color="accent">
         <q-fab-action @click="stateInitialization" color="primary" icon="mdi-refresh" />
@@ -58,7 +45,7 @@ import { zhCN, dateZhCN } from 'naive-ui'
 import { ref } from 'vue'
 import type { UploadInst } from 'naive-ui'
 
-import WaterFall from 'components/WaterFall.vue'
+import WaterFall from 'components/testc/WaterFall.vue'
 import SetComponent from 'components/SetComponent.vue'
 
 const upload = ref<UploadInst | null>()
@@ -70,9 +57,6 @@ const setStore = useSettingStore()
 
 
 function openSetModal() {
-
-  console.log('ddd')
-  querydb()
   setStore.isOpen = true
   console.log(setStore.isOpen)
 }
@@ -86,8 +70,8 @@ function stateInitialization() {
 
 async function querydb() {
   console.log(await window.storeAPI.get('itemNum'))
-  // console.log(await window.storeAPI.set('itemxxxxum', 'hahahahahh'))
-  // console.log(await window.storeAPI.get('itemxxxxum'))
+  console.log(await window.storeAPI.set('itemxxxxum', 'hahahahahh'))
+  console.log(await window.storeAPI.get('itemxxxxum'))
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // window.storeAPI.get('itemNum').then((res: any) => {
   //   console.log(res)
@@ -96,10 +80,8 @@ async function querydb() {
 
 async function picInfoInit(fpath) {
   console.log('picInfoInit')
-  let aa = JSON.parse(JSON.stringify(setStore.getPFormat))
-  console.log(aa)
-  imgs.value = await window.myToolAPI.traverseFolder(fpath, aa)
-  // console.log(imgs.value)
+  imgs.value = await window.myToolAPI.traverseFolder(fpath, setStore.imageFormat)
+  console.log(imgs.value)
   ifImgPreOK.value = true
 }
 
