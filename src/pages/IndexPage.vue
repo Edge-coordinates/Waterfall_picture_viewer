@@ -27,16 +27,25 @@
         </n-upload>
       </n-config-provider>
     </div>
-    <div v-if="!ifImgPreOK">
+    <div v-if="!ifImgPreOK" class="mx-2.5 my-4">
+      <p class="text-h6">Tips:</p>
       <q-list separator>
         <q-item v-ripple>
-          <q-item-section>打开图片查看器之后，使用 ctrl + 鼠标滚轮调整图片大小</q-item-section>
+          <i class="fa-regular fa-face-smile-hearts text-base"></i>
+          <p>&nbsp;&nbsp;打开图片查看器之后，使用 <kbd class="kbd kbd-sm bg-white">Ctrl</kbd> +
+            <kbd class="kbd kbd-sm bg-white">鼠标滚轮</kbd>调整图片大小;图片查看器支持<kbd class="kbd kbd-sm bg-white">◀︎</kbd>
+            <kbd class="kbd kbd-sm bg-white">▶︎</kbd>快捷键切换图片~
+          </p>
         </q-item>
 
         <q-item clickable v-ripple>
-          <q-item-section>
-            <q-item-label>图片查看器支持左右快捷键翻页，支持esc快捷键退出</q-item-label>
-          </q-item-section>
+          <i class="fa-sharp fa-regular fa-comment-heart text-base"></i>
+          <p>&nbsp;&nbsp;图片查看器支持左右快捷键翻页，支持<kbd class="kbd kbd-sm bg-white">Esc</kbd>快捷键退出</p>
+        </q-item>
+
+        <q-item clickable v-ripple>
+          <i class="fa-sharp fa-regular fa-house-chimney-heart text-base"></i>
+          <p>&nbsp;&nbsp;祝您使用愉快！</p>
         </q-item>
       </q-list>
     </div>

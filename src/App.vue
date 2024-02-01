@@ -15,8 +15,11 @@ import { onMounted } from 'vue'
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
 async function initData() {
-  setStore.perPageNum = await window.storeAPI.get('itemNum')
-  console.log('setData inited!')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let tmpdata: any
+  if (tmpdata = await window.storeAPI.get('itemNum')) setStore.perPageNum = tmpdata
+  console.log(await window.storeAPI.get('itemNum'), setStore.perPageNum)
+  console.log('APP setData inited!')
 }
 
 onMounted(() => {

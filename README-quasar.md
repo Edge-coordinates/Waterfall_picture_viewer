@@ -1,4 +1,4 @@
-# Quasar App (quasar-project-02)
+# Quasar App (ETools)
 
 A Quasar Project
 

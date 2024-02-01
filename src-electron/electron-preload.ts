@@ -36,7 +36,9 @@ export type storeAPI = {
   // will contain the data of the file read from the main process.
   get: (key: any) => any;
   set: (key: any, value: any) => any;
+  delete: (key: any) => any;
   initData: () => any;
+  ini: () => void;
 };
 
 export type myWindowAPI = {
@@ -44,6 +46,7 @@ export type myWindowAPI = {
   toggleMaximize: () => Promise<any>;
   close: () => Promise<any>;
   openDevTool: () => any;
+  isPackaged: () => any;
 };
 
 export type myToolAPI = {
@@ -52,7 +55,7 @@ export type myToolAPI = {
 };
 
 import { contextBridge, ipcRenderer } from 'electron';
-import { BrowserWindow } from '@electron/remote';
+import { BrowserWindow, app } from '@electron/remote';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -75,6 +78,14 @@ const myStoreAPI: storeAPI = {
   async set (key, value) {
     return await ipcRenderer.invoke('store-set', key, value);
     // store.set(key, value);
+  },
+
+  async delete (key) {
+    return await ipcRenderer.invoke('store-delete', key);
+  },
+
+  ini () {
+    ipcRenderer.invoke('store-ini');
   },
 
   initData () {
@@ -108,5 +119,9 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
 
   openDevTool () {
     BrowserWindow.getFocusedWindow()!.webContents.openDevTools();
+  },
+
+  isPackaged () {
+    return app.isPackaged;
   }
 });

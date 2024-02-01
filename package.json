@@ -1,8 +1,8 @@
 {
   "name": "waterfall-picture-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple picture viewer",
-  "productName": "Quasar App",
+  "productName": "W Viewer",
   "author": "边缘坐标 <Edgecoordinates@gmail.com>",
   "private": true,
   "scripts": {

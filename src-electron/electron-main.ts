@@ -39,9 +39,9 @@ function createWindow () {
     mainWindow.webContents.openDevTools();
   } else {
     // we're on production; no access to devtools pls
-    mainWindow.webContents.on('devtools-opened', () => {
-      mainWindow?.webContents.closeDevTools();
-    });
+    // mainWindow.webContents.on('devtools-opened', () => {
+    //   mainWindow?.webContents.closeDevTools();
+    // });
   }
 
   mainWindow.on('closed', () => {
@@ -55,8 +55,11 @@ app.on('window-all-closed', () => {
   }
 });
 
+import { data_init } from './IPC-main';
+
 app.whenReady().then(() => {
   if (mainWindow === undefined) {
+    data_init();
     createWindow();
   }
 });

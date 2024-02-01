@@ -17,7 +17,7 @@
       </div>
     </div>
   </div>
-  <div class="hero min-h-screen bg-base-200">
+  <div class="hero min-h-screen bg-blue-300">
     <div class="hero-content flex-col md:flex-row">
       <img src="~assets/edge-avatar.jpg" class="max-w-sm rounded-lg shadow-2xl" />
       <div>

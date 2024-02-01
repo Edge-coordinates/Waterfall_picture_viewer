@@ -96,9 +96,10 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
               <q-item clickable>
                 <q-item-section><router-link to="/about">About</router-link></q-item-section>
               </q-item>
-              <!-- <q-item clickable>
-                <q-item-section><router-link to="/test">TEST</router-link></q-item-section>
-              </q-item> -->
+              <template v-if="!isPackaged()">
+                <q-item clickable><q-item-section><router-link to="/test">TEST</router-link></q-item-section></q-item>
+                <q-item clickable><q-item-section><router-link to="/test/a">TEST A</router-link></q-item-section></q-item>
+              </template>
             </q-list>
           </q-menu>
         </div>
@@ -124,6 +125,9 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
 
 export default {
   setup() {
+    function isPackaged() {
+      return window.myWindowAPI.isPackaged()
+    }
     function minimize() {
       window.myWindowAPI?.minimize()
     }
@@ -140,7 +144,7 @@ export default {
       window.myWindowAPI?.openDevTool()
     }
 
-    return { minimize, toggleMaximize, closeApp, openDevTool }
+    return { minimize, toggleMaximize, closeApp, openDevTool, isPackaged }
   }
 }
 </script>
