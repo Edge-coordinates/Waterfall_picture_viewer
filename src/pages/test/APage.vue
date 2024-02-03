@@ -1,23 +1,16 @@
 <template>
-  <q-btn @click="querydb">QueryDB</q-btn>
-  <q-btn @click="cc">iniDB</q-btn>
+  <n-dynamic-input v-model:value="value" preset="pair" key-placeholder="环境变量名" value-placeholder="环境变量值" />
+  <pre>{{ JSON.stringify(value, null, 2) }}</pre>
 </template>
 
 <script setup lang="ts">
-function cc() {
-  window.storeAPI.ini()
-}
-async function querydb() {
-  // console.log(await window.storeAPI.get('itemNum'))
-  // console.log(await window.storeAPI.set('itemxxxxum', 'hahahahahh'))
-  console.log('ddddd')
-  console.log(await window.storeAPI.delete('itemxxxxum'))
-  // console.log(await window.storeAPI.get('itemxxxxum'))
-  if (await window.storeAPI.get('itemxxxxum')) console.log('sss')
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // window.storeAPI.get('itemNum').then((res: any) => {
-  //   console.log(res)
-  // })
-}
+import { NDynamicInput } from 'naive-ui'
+import { ref } from 'vue'
 
+let value = ref([
+  {
+    maxSize: '',
+    value: ''
+  }
+])
 </script>

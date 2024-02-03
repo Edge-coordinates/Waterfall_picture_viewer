@@ -62,13 +62,18 @@
 
               <q-tab-panel name="alarms">
                 <div class="text-h4 q-mb-md">查看器设置</div>
-                <p>暂时没有！</p>
-                <p>
-                  早晨起来，泡一碗浓茶，向院子一坐，你也能看得到很高很高的碧绿的天色，听得到青天下驯鸽的飞声。从槐树叶底，朝东细数着一丝一丝漏下来的日光，或在破壁腰中，静对着像喇叭似的牵牛花（朝荣）的蓝朵，自然而然地也能够感觉到十分的秋意。
-                </p>
-                <p>
-                  入秋以后，蜻蜓变弱了，肉体死后，只剩灵魂，摇摇晃晃飞来飞去。透过秋日的阳光，能看到蜻蜓的身体是透明的。
-                </p>
+                <n-dynamic-input v-model:value="WBValue" preset="pair" key-placeholder="环境变量名"
+                  value-placeholder="环境变量值" />
+                <q-btn class="float-right" round dense flat icon="mdi-content-save"
+                  @click="saveData('WBreakpoint')"><q-tooltip class="bg-purple text-body2" :offset="[10, 10]">
+                    保存设置
+                  </q-tooltip></q-btn>
+                <div>
+                  <br />
+                  键值对设置 瀑布流断点：e.g. <b>1200 4</b> 代表宽度大于 1200 之后每行显示四张图片~<br />
+                  但是众所周知，软件是不会显示具体宽度的，所以你们量子调整一下就好。
+                </div>
+                <!-- <pre>{{ JSON.stringify(WBValue, null, 2) }}</pre> -->
               </q-tab-panel>
 
               <q-tab-panel name="movies">
@@ -97,13 +102,13 @@
                   </template>
 
                   <template v-slot:after>
-                    <q-btn round dense flat icon="mdi-send" />
+                    <q-btn disable round dense flat icon="mdi-send" />
                   </template>
                 </q-input>
 
                 <q-input bottom-slots v-model="text" label="Label">
                   <template v-slot:after>
-                    <q-btn round dense flat icon="mdi-send" />
+                    <q-btn disable round dense flat icon="mdi-send" />
                   </template>
                 </q-input>
               </q-tab-panel>
@@ -123,6 +128,7 @@
 <script setup lang="ts">
 let text, dense
 import { ref, reactive, onMounted } from 'vue'
+import { NDynamicInput } from 'naive-ui'
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
@@ -135,6 +141,22 @@ const simpleSetData = reactive({
 
 const tab = ref('mails')
 const splitterModel = ref(20) // 这啥啊？
+const WBValue: any = ref(WB2WBV(setStore.waterfallBreakpoint))
+
+function WB2WBV(fValue: any) {
+  let resultArray: any = Object.entries(fValue)
+  resultArray = resultArray.map(([key, { rowPerView }]) => ({ key: parseInt(key), value: rowPerView }));
+  return resultArray
+}
+
+function WBV2WB(fValue: any) {
+  // let resultArray: any = Object.entries(fValue)
+  let resultArray = fValue.reduce((acc, { key, value }) => {
+    acc[key] = { rowPerView: value };
+    return acc;
+  }, {});
+  return resultArray
+}
 
 function checked(a, b) {
   if (a) return a
@@ -145,8 +167,10 @@ function updateStore() {
   if (simpleSetData.perPageNum) setStore.perPageNum = <any>simpleSetData.perPageNum
   setStore.imageFormat = <any>simpleSetData.imageFormat.replace(/\s/g, '').split(',');
   setStore.vNavbar = Number(simpleSetData.vNavbar)
+  setStore.waterfallBreakpoint = WBV2WB(WBValue.value)
   console.log(simpleSetData)
   console.log(setStore.vNavbar)
+  // console.log(WBV2WB(WBValue.value))
 }
 
 function saveData(id) {
@@ -156,6 +180,11 @@ function saveData(id) {
       setStore.perPageNum = checked(<any>simpleSetData.perPageNum, setStore.perPageNum)
       window.storeAPI.set('itemNum', setStore.perPageNum)
       break;
+    case 'WBreakpoint':
+      setStore.waterfallBreakpoint = WBV2WB(WBValue.value)
+      window.storeAPI.set('WBreakpoint', JSON.parse(JSON.stringify(setStore.waterfallBreakpoint)))
+      break
+
   }
 }
 

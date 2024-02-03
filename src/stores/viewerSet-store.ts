@@ -15,6 +15,23 @@ export const useSettingStore = defineStore('setting', {
       '.jfif'
     ],
     vNavbar: 1,
+    waterfallBreakpoint: {
+      1400: {
+        rowPerView: 5
+      },
+      1200: {
+        // 当屏幕宽度小于等于1200
+        rowPerView: 4
+      },
+      800: {
+        // 当屏幕宽度小于等于800
+        rowPerView: 3
+      },
+      500: {
+        // 当屏幕宽度小于等于500
+        rowPerView: 2
+      }
+    },
     hello: '草泥马'
   }),
   getters: {

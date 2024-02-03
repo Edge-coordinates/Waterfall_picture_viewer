@@ -40,7 +40,8 @@
 
         <q-item clickable v-ripple>
           <i class="fa-sharp fa-regular fa-comment-heart text-base"></i>
-          <p>&nbsp;&nbsp;图片查看器支持左右快捷键翻页，支持<kbd class="kbd kbd-sm bg-white">Esc</kbd>快捷键退出</p>
+          <p>&nbsp;&nbsp;图片查看器支持左右快捷键翻页，支持<kbd class="kbd kbd-sm bg-white">Esc</kbd>快捷键退出。您也可以按<kbd
+              class="kbd kbd-sm bg-white">Delete</kbd>键来删除当前正在浏览的图片！（会删除到回收站，不保证稳定！）</p>
         </q-item>
 
         <q-item clickable v-ripple>
@@ -114,12 +115,20 @@ async function picInfoInit(fpath) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function onUpload(e: any) {
-  let fpath = e.file.fullPath
-  const fullfpath = e.file.file.path
-  let rt = fpath.split('/')[1]
-  fpath = fullfpath.split(rt)[0] + rt + '\\'
-  // console.log(rt, fpath, fullfpath)
+  let fpath = e.file.fullPath // 相对路径
+  const fullfpath = e.file.file.path // 绝对路径
+  let rt = new RegExp(String.raw`\\${fpath.split('/')[1]}\\`)
+  const match = rt.exec(fullfpath);
+  const matchedText = match![0];
+  const beforeMatch = fullfpath.substring(0, match!.index);
+  fpath = beforeMatch + matchedText
   console.log(e)
+  console.log(rt, fpath, fullfpath);
+  console.log(match, matchedText, beforeMatch)
+  // fpath = fullfpath.split(rt)[0] + rt + '\\'
+  // console.log(fpath);
+
+  // console.log(rt, fpath, fullfpath)
 
   picInfoInit(fpath)
 }

@@ -8,7 +8,8 @@
       <template #item="{ item, url }">
         <div
           class="bg-gray-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-lg hover:shadow-gray-600 group">
-          <a :key="url" :href="url" :data-pswp-width="item.width" :data-pswp-height="item.height" class="overflow-hidden">
+          <a :key="url" :href="url" :data-pswp-width="item.width" :data-pswp-height="item.height"
+            :data-source="item.source" class="overflow-hidden">
             <LazyImg :url="url" alt=""
               class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" @load="imageLoad"
               @error="imageError" @success="imageSuccess" />
@@ -40,6 +41,15 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
+
+function getFolder(filePath: string, regexPattern: RegExp): string {
+  var directory = filePath.substring(
+    0,
+    filePath.lastIndexOf('\\'),
+  );
+  return directory.replace(regexPattern, '')
+}
+
 import { NInputNumber } from 'naive-ui'
 import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue'
 import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
@@ -58,13 +68,9 @@ const props = defineProps({
     }
   }
 })
+
+let oImgs = ref(props.imgs)
 const inputPageValue = ref(1)
-
-// const list = computed(() => {
-
-// })
-
-
 // import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 // import 'vue-waterfall-plugin-next/dist/style.css'
 // import { getList } from '../api'
@@ -72,7 +78,7 @@ import loading from 'assets/loading.png'
 import error from 'assets/error.png'
 
 async function getList({ page, pageSize }) {
-  return props.imgs?.slice((page - 1) * pageSize, page * pageSize)
+  return oImgs.value.slice((page - 1) * pageSize, page * pageSize)
   // .map((element) => {
   //   // 对每个元素进行处理?
   //   return {
@@ -90,7 +96,7 @@ watch(page, (newVal, oldVal) => {
   console.log('myVariable changed:', newVal);
 });
 const pageNum = computed(() => {
-  return Math.ceil(props.imgs.length / setStore.perPageNum)
+  return Math.ceil(oImgs.value.length / setStore.perPageNum)
   // return 10
 })
 const list = ref<any>([])
@@ -118,6 +124,38 @@ function handleLoadMore() {
   })
 }
 
+
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
+let lightbox: any, thisPic: string
+
+function handleViewerKeyDown(event) {// 检查是否按下了特定的键，例如 Ctrl + S
+  if (event.key === 'Delete') {
+    event.preventDefault(); // 阻止默认行为（例如保存网页）
+    console.log('pressed Delete.');
+    // let pswpImgSrc: any = document.querySelector('img.pswp__img')
+    // pswpImgSrc = <string>pswpImgSrc!.getAttribute('src').replace(/atom:\/\//g, '')
+    // pswpImgSrc = decodeURIComponent(pswpImgSrc)
+    let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '')
+    console.log(pswpImgSrc)
+    if (confirm('确定要删除图片嘛？')) {
+      window.myToolAPI.delPic(pswpImgSrc)
+      // console.log(getFolder(pswpImgSrc, /atom:\/\//g))
+      // 在瀑布流中删除图片！！
+      const indexToDelete = oImgs.value.findIndex((img: any) => img.source === pswpImgSrc)
+      if (indexToDelete !== -1) {
+        oImgs.value.splice(indexToDelete, 1);
+        console.log(`Object with source '${pswpImgSrc}' deleted.`);
+      } else {
+        console.log(`Object with source '${pswpImgSrc}' not found.`);
+      }
+      handleLoadMore()
+    }
+  }
+  // 可以添加其他条件检查
+}
+
+
 // 首次加载
 onMounted(() => {
   handleLoadMore()
@@ -127,6 +165,57 @@ onMounted(() => {
       children: 'a',
       pswpModule: () => import('photoswipe'),
     });
+    lightbox.on('uiRegister', function () {
+      lightbox.pswp.ui.registerElement({
+        name: 'folder-button',
+        ariaLabel: 'Open in folder',
+        order: 9,
+        isButton: true,
+        html: '<i class="fa-regular fa-folder-open"></i>',
+        onClick: (event, el) => {
+          // if (confirm('Do you want to toggle zoom?')) {
+          //   lightbox.pswp.toggleZoom();
+          // }
+          let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '')
+          window.myToolAPI.showItemInFolder(pswpImgSrc)
+          // alert('回头再做的在文件夹打开。')
+
+        }
+      });
+      lightbox.pswp.ui.registerElement({
+        name: 'open-button',
+        ariaLabel: 'Open with default software',
+        order: 8,
+        isButton: true,
+        html: '<i class="fa-duotone fa-images"></i>',
+        onClick: (event, el) => {
+          // if (confirm('Do you want to toggle zoom?')) {
+          //   lightbox.pswp.toggleZoom();
+          // }
+          let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '')
+          window.myToolAPI.openPath(pswpImgSrc)
+          // alert('回头再做的在文件夹打开。')
+
+        }
+      });
+    });
+
+    lightbox.on('contentActivate', ({ content }) => {
+      console.log('contentActivate', content.data.src);
+      thisPic = content.data.src
+    });
+
+    lightbox.on('openingAnimationStart', () => {
+      // 开始监听 查看器内 快捷键
+      document.addEventListener('keydown', handleViewerKeyDown);
+      console.log('openingAnimationStart');
+    });
+
+    lightbox.on('closingAnimationStart', () => {
+      document.removeEventListener('keydown', handleViewerKeyDown);
+      console.log('closingAnimationStart');
+    });
+
     lightbox.init();
   }
 })
@@ -149,23 +238,7 @@ const options = computed(() => {
     // 卡片在PC上的宽度
     width: 320,
     // 自定义行显示个数，主要用于对移动端的适配
-    breakpoints: {
-      1400: {
-        rowPerView: 5,
-      },
-      1200: {
-        // 当屏幕宽度小于等于1200
-        rowPerView: 4,
-      },
-      800: {
-        // 当屏幕宽度小于等于800
-        rowPerView: 3,
-      },
-      500: {
-        // 当屏幕宽度小于等于500
-        rowPerView: 2,
-      },
-    },
+    breakpoints: setStore.waterfallBreakpoint,
     // 动画效果
     animationEffect: 'animate__fadeInUp',
     // 动画时间
@@ -186,12 +259,6 @@ const options = computed(() => {
     crossOrigin: false,
   }
 })
-
-
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/style.css';
-let lightbox: any
-
 
 // import 'viewerjs/dist/viewer.css'
 // import { directive as viewer } from 'v-viewer'
@@ -253,6 +320,19 @@ function imageSuccess(url: string) {
 .viewer-info::before {
   content: "\f129";
 }
+
+button.pswp__button--folder-button {
+  /* background: #136912 !important; */
+  font-size: 20px;
+  color: #fff;
+}
+
+button.pswp__button--open-button {
+  /* background: #136912 !important; */
+  font-size: 20px;
+  color: #fff;
+}
+
 
 /* .page-b-content {
   padding: 20px;

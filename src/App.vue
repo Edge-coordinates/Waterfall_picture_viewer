@@ -18,7 +18,8 @@ async function initData() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let tmpdata: any
   if (tmpdata = await window.storeAPI.get('itemNum')) setStore.perPageNum = tmpdata
-  console.log(await window.storeAPI.get('itemNum'), setStore.perPageNum)
+  if (tmpdata = await window.storeAPI.get('WBreakpoint')) setStore.waterfallBreakpoint = tmpdata
+  console.log(await window.storeAPI.get('WBreakpoint'), setStore.waterfallBreakpoint)
   console.log('APP setData inited!')
 }
 

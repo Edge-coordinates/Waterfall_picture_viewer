@@ -52,10 +52,13 @@ export type myWindowAPI = {
 export type myToolAPI = {
   traverseFolder: (path: string, pFormats: any) => any;
   openLink: (link: string) => any;
+  delPic: (src: string) => any;
+  openPath: (src: string) => any;
+  showItemInFolder: (src: string) => any;
 };
 
 import { contextBridge, ipcRenderer } from 'electron';
-import { BrowserWindow, app } from '@electron/remote';
+import { BrowserWindow, app, shell } from '@electron/remote';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -65,6 +68,15 @@ const myToolAPIs: myToolAPI = {
   },
   async openLink (link) {
     return await ipcRenderer.invoke('tool-openLink', link);
+  },
+  async delPic (src) {
+    return await ipcRenderer.invoke('tool-delPic', src);
+  },
+  async openPath (src) {
+    return await ipcRenderer.invoke('tool-openPath', src);
+  },
+  async showItemInFolder (src) {
+    shell.showItemInFolder(src);
   }
 };
 

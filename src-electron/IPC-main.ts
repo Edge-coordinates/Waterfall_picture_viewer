@@ -2,6 +2,27 @@ import { ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { schema } from './default-data';
 
+const fs = require('fs-extra');
+import trash from 'trash';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isFileSync (path) {
+  try {
+    // 使用 fs.existsSync 检查路径是否存在
+    if (fs.existsSync(path)) {
+      // 使用 fs.statSync 获取路径的状态
+      const stats = fs.statSync(path);
+      // 判断是否是文件
+      return stats.isFile();
+    }
+    return false;
+  } catch (err) {
+    // 处理错误
+    console.error('Error checking file synchronously:', err);
+    return false;
+  }
+}
+
 let store = new Store();
 // 重构判断是否为空并
 
@@ -44,5 +65,17 @@ export function ipcMains (value: void): any {
   ipcMain.handle('tool-openLink', (event, link) => {
     console.log(link);
     return shell.openExternal(link);
+  });
+
+  ipcMain.handle('tool-openPath', (event, link) => {
+    shell.openPath(link);
+  });
+
+  ipcMain.handle('tool-delPic', (event, src) => {
+    // fs.removeSync(src);
+    if (isFileSync(src)) {
+      trash(src);
+    }
+    console.log('Del: ', src);
   });
 }
