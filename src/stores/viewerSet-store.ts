@@ -4,6 +4,7 @@ export const useSettingStore = defineStore('setting', {
   state: () => ({
     isOpen: false,
     perPageNum: 20,
+    cycleUpdate: false,
     imageFormat: [
       '.webp',
       '.jxl',

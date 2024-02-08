@@ -118,9 +118,8 @@ export function imageRetrieval (thepath, pFormats) {
   imageLinks = [];
   picLinks = [];
   traverseFolderObjects(thepath);
+  console.log('Finish traverseFolderObjects!');
   return picLinks;
-  // traverseFolder(thepath);
-  // return imageLinks;
 }
 // // 开始遍历
 // traverseFolder(rootPath);

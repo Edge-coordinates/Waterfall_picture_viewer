@@ -26,7 +26,7 @@ D:\Edge-coordinates\R-18\图片\0 backup\新建文件夹\Dishwasher1910作品合
 */
 
 const text = String.raw`D:\Edge-coordinates\R-18\图片\0 backup\新建文件夹\Dishwasher1910作品合集\Dishwasher1910\Dishwasher1910\2016\Dish_2016.08\1.png`;
-const regex = /\\Dishwasher1910\\/;
+const regex = 'Dishwasher1910';
 
 const match = regex.exec(text);
 

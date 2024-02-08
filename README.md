@@ -37,9 +37,9 @@
 - 如果图片过大，硬盘性能不好，可能会造成加载浏览卡顿，这时候，建议使用固态硬盘，或者调小每一页展示的图片数量！！
 
 ## 使用示例
-
-### 其一
-**[TG preview link](https://t.me/edge_wasteland/6464)**
+- **[YouTube](https://www.youtube.com/watch?v=MHicKz_QJ1w)**
+- **[Telegram](https://t.me/edge_wasteland/6526)**
+- **[哔哩哔哩](https://www.bilibili.com/video/BV1tm411Q7Js/)**
 <!-- **[GIF preview link](https://postimg.cc/ctZfPV1q)** -->
 
 ### For NSFW Use

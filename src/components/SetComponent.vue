@@ -26,6 +26,7 @@
           <template v-slot:after>
             <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">
               <q-tab-panel name="mails">
+                <!-- ANCHOR 基础设置 -->
                 <div class="text-h4 q-mb-md">基础设置</div>
                 <q-input v-model="simpleSetData.perPageNum" :label="'每页展示图片数目 当前:' + setStore.perPageNum + '/页'">
                   <template v-slot:after>
@@ -43,6 +44,15 @@
                       </q-tooltip></q-btn>
                   </template>
                 </q-input>
+                <q-toggle :label="`自动重排开启状态${setStore.cycleUpdate}`" v-model="setStore.cycleUpdate" />
+                <q-icon round dense flat color="primary" name="mdi-help"><q-tooltip class="bg-purple text-body2"
+                    :offset="[10, 10]">
+                    自动重排：如果您经常遇到瀑布流排版不正确导致需要手动点击以重新排版的情况，可以开启此选项。
+                  </q-tooltip></q-icon>
+                <q-btn class="float-right" round dense flat icon="mdi-content-save"
+                  @click="saveData('cycleUpdate')"><q-tooltip class="bg-purple text-body2" :offset="[10, 10]">
+                    保存设置
+                  </q-tooltip></q-btn>
                 <!-- <div>是否开启图片查看器画廊：<q-toggle disable v-model="simpleSetData.vNavbar" /></div> -->
                 <div>
                   <br />
@@ -184,7 +194,9 @@ function saveData(id) {
       setStore.waterfallBreakpoint = WBV2WB(WBValue.value)
       window.storeAPI.set('WBreakpoint', JSON.parse(JSON.stringify(setStore.waterfallBreakpoint)))
       break
-
+    case 'cycleUpdate':
+      window.storeAPI.set('cycleUpdate', setStore.cycleUpdate)
+      break
   }
 }
 

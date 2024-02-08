@@ -1,10 +1,5 @@
 <template>
   <q-page style="margin-top: 20px;">
-    <!-- <div class="row items-center justify-evenly">
-      <router-link to="/test" class="btn">Go to Test</router-link>
-      <button class="btn" @click="querydb">Button</button>
-      <button class="btn" @click="picInfoInit">Button</button>
-    </div> -->
     <div v-if="ifImgPreOK" class="h-full">
       <water-fall :imgs="imgs"></water-fall>
       <!-- <water-fall /> -->
@@ -113,22 +108,23 @@ async function picInfoInit(fpath) {
   ifImgPreOK.value = true
 }
 
+import { normalizePath } from './normalize-path'
+
+function getFolderPath(fpath, fullfpath) {
+  fpath = normalizePath(fpath)
+  fullfpath = normalizePath(fullfpath)
+  let root = '/' + fpath.split('/')[1] + '/'
+  return fullfpath.replace(fpath, root)
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function onUpload(e: any) {
+  console.log('onUpload!');
+  // ! 修改计算逻辑，不用正则了，采用原始字符串匹配？
   let fpath = e.file.fullPath // 相对路径
   const fullfpath = e.file.file.path // 绝对路径
-  let rt = new RegExp(String.raw`\\${fpath.split('/')[1]}\\`)
-  const match = rt.exec(fullfpath);
-  const matchedText = match![0];
-  const beforeMatch = fullfpath.substring(0, match!.index);
-  fpath = beforeMatch + matchedText
-  console.log(e)
-  console.log(rt, fpath, fullfpath);
-  console.log(match, matchedText, beforeMatch)
-  // fpath = fullfpath.split(rt)[0] + rt + '\\'
-  // console.log(fpath);
-
-  // console.log(rt, fpath, fullfpath)
+  fpath = getFolderPath(fpath, fullfpath)
+  console.log(fpath);
 
   picInfoInit(fpath)
 }

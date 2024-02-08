@@ -19,7 +19,8 @@ async function initData() {
   let tmpdata: any
   if (tmpdata = await window.storeAPI.get('itemNum')) setStore.perPageNum = tmpdata
   if (tmpdata = await window.storeAPI.get('WBreakpoint')) setStore.waterfallBreakpoint = tmpdata
-  console.log(await window.storeAPI.get('WBreakpoint'), setStore.waterfallBreakpoint)
+  if (tmpdata = await window.storeAPI.get('cycleUpdate')) setStore.cycleUpdate = tmpdata
+  // console.log(await window.storeAPI.get('WBreakpoint'), setStore.waterfallBreakpoint)
   console.log('APP setData inited!')
 }
 

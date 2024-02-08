@@ -41,15 +41,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-
-function getFolder(filePath: string, regexPattern: RegExp): string {
-  var directory = filePath.substring(
-    0,
-    filePath.lastIndexOf('\\'),
-  );
-  return directory.replace(regexPattern, '')
-}
-
 import { NInputNumber } from 'naive-ui'
 import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue'
 import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
@@ -69,7 +60,7 @@ const props = defineProps({
   }
 })
 
-let oImgs = ref(props.imgs)
+let oImgs = ref(props.imgs) // 啥玩意《
 const inputPageValue = ref(1)
 // import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 // import 'vue-waterfall-plugin-next/dist/style.css'
@@ -116,6 +107,7 @@ function scrollToTop() {
 
 // 加载更多
 function handleLoadMore() {
+  console.log('handleLoadMore!');
   getList({
     page: page.value,
     pageSize: setStore.perPageNum,
@@ -124,12 +116,13 @@ function handleLoadMore() {
   })
 }
 
-
+// ANCHOR 查看器初始化
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
 let lightbox: any, thisPic: string
+let isLightboxOpen = ref(false)
 
-function handleViewerKeyDown(event) {// 检查是否按下了特定的键，例如 Ctrl + S
+function handleViewerKeyDown(event) {// * 查看器内部 检查是否按下了特定的键，例如 Ctrl + S
   if (event.key === 'Delete') {
     event.preventDefault(); // 阻止默认行为（例如保存网页）
     console.log('pressed Delete.');
@@ -155,10 +148,51 @@ function handleViewerKeyDown(event) {// 检查是否按下了特定的键，例�
   // 可以添加其他条件检查
 }
 
+let theCycleUpdateInterval
+function turnOnCycleUpdate() {
+  console.log('Turn on cycleUpdate');
+  theCycleUpdateInterval = window.setInterval(handleLoadMore, 500);
+}
+
+function tEventListening() { // * 一些乱七八糟的事件的监听
+  if (setStore.cycleUpdate) {
+    turnOnCycleUpdate()
+  }
+  document.addEventListener('keydown', function (event: any) {
+    const key = event.key
+    if (isLightboxOpen.value == false) {
+      if (key == 'ArrowRight') {
+        if (page.value < pageNum.value) {
+          page.value = page.value + 1
+          handleLoadMore()
+        }
+      }
+      if (key == 'ArrowLeft') {
+        if (page.value > 1) {
+          page.value = page.value - 1
+          handleLoadMore()
+        }
+      }
+    }
+  });
+  setStore.$subscribe((mutation: any, state) => {
+    // console.log(mutation, state)
+    // 监听 章节正则表达式变化，之后重绘书籍
+    if (mutation.events.key == 'cycleUpdate') {
+      // console.log(state.cycleUpdate)
+      if (state.cycleUpdate)
+        turnOnCycleUpdate()
+      else
+        window.clearInterval(theCycleUpdateInterval);
+    }
+  })
+
+}
 
 // 首次加载
 onMounted(() => {
   handleLoadMore()
+  tEventListening()
   if (!lightbox) {
     lightbox = new PhotoSwipeLightbox({
       gallery: '#pic-wrapper',
@@ -208,11 +242,13 @@ onMounted(() => {
     lightbox.on('openingAnimationStart', () => {
       // 开始监听 查看器内 快捷键
       document.addEventListener('keydown', handleViewerKeyDown);
+      isLightboxOpen.value = true
       console.log('openingAnimationStart');
     });
 
     lightbox.on('closingAnimationStart', () => {
       document.removeEventListener('keydown', handleViewerKeyDown);
+      isLightboxOpen.value = false
       console.log('closingAnimationStart');
     });
 
