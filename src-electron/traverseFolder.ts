@@ -84,11 +84,11 @@ function traverseFolderObjects (currentPath) {
           srcThumb: 'atom://' + filePath
         });
         picMetaMap.set(filePath, picLinks.length - 1);
-        const dimensions = sizeOf(filePath);
-        // console.log(dimensions.width, dimensions.height);
-        // console.log(filePath);
-        picLinks[picMetaMap.get(filePath)].height = dimensions.height;
-        picLinks[picMetaMap.get(filePath)].width = dimensions.width;
+        try{
+          const dimensions = sizeOf(filePath);
+          picLinks[picMetaMap.get(filePath)].height = dimensions.height;
+          picLinks[picMetaMap.get(filePath)].width = dimensions.width;
+        }catch (err) {}
         // console.log(picLinks[picMetaMap.get(filePath)]);
 
         // 异步方案，有问题
