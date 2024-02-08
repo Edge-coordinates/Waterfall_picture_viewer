@@ -151,7 +151,7 @@ function handleViewerKeyDown(event) {// * 查看器内部 检查是否按下了�
 let theCycleUpdateInterval
 function turnOnCycleUpdate() {
   console.log('Turn on cycleUpdate');
-  theCycleUpdateInterval = window.setInterval(handleLoadMore, 500);
+  theCycleUpdateInterval = setInterval(handleLoadMore, 500);
 }
 
 function tEventListening() { // * 一些乱七八糟的事件的监听
@@ -175,18 +175,12 @@ function tEventListening() { // * 一些乱七八糟的事件的监听
       }
     }
   });
-  setStore.$subscribe((mutation: any, state) => {
-    // console.log(mutation, state)
-    // 监听 章节正则表达式变化，之后重绘书籍
-    if (mutation.events.key == 'cycleUpdate') {
-      // console.log(state.cycleUpdate)
-      if (state.cycleUpdate)
-        turnOnCycleUpdate()
-      else
-        window.clearInterval(theCycleUpdateInterval);
-    }
+  watch(() => setStore.cycleUpdate, (newValue, oldValue) => {
+    if (newValue)
+      turnOnCycleUpdate()
+    else
+      clearInterval(theCycleUpdateInterval);
   })
-
 }
 
 // 首次加载
