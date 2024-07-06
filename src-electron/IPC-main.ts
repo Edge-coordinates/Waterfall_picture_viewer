@@ -26,7 +26,7 @@ function isFileSync (path) {
 let store = new Store();
 // 重构判断是否为空并
 
-import { imageRetrieval } from './traverseFolder';
+import { imageRetrieval, imageRetrievalAsync } from './traverseFolder';
 
 export function data_init () {
   if (!store.get('itemNum')) store = new Store({ schema });
@@ -60,6 +60,10 @@ export function ipcMains (value: void): any {
   ipcMain.handle('tool-traverseFolder', (event, path, pFormats) => {
     console.log(path, pFormats);
     return imageRetrieval(path, pFormats);
+  });
+
+  ipcMain.handle('tool-traverseFolder-async', (event, path, pFormats, pPageNum) => {
+    return imageRetrievalAsync(path, pFormats, pPageNum);
   });
 
   ipcMain.handle('tool-openLink', (event, link) => {

@@ -37,7 +37,8 @@ export const useSettingStore = defineStore('setting', {
   }),
   getters: {
     // doubleCount: state => state.counter * 2
-    getPFormat: state => state.imageFormat
+    getPFormat: state => state.imageFormat,
+    getPerPageNum: state => state.perPageNum,
   },
   actions: {
     increment () {

@@ -7,7 +7,7 @@ initialize();
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
 
-let mainWindow: BrowserWindow | undefined;
+export let mainWindow: BrowserWindow | undefined;
 
 function createWindow () {
   /**
