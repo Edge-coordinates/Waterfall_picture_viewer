@@ -51,20 +51,27 @@ export type myWindowAPI = {
 
 export type myToolAPI = {
   traverseFolder: (path: string, pFormats: any) => any;
+  traverseFolderAsync: (path: string, pFormats: string[], perPageNum: number) => any;
   openLink: (link: string) => any;
   delPic: (src: string) => any;
   openPath: (src: string) => any;
   showItemInFolder: (src: string) => any;
+  onAsyncImageLinksAppend: (handle: (event: IpcRendererEvent, taskName: string, paths: WImage[]) => void) => void;
 };
 
 import { contextBridge, ipcRenderer } from 'electron';
+import type { IpcRendererEvent } from 'electron';
 import { BrowserWindow, app, shell } from '@electron/remote';
+import type { WImage } from './traverseFolder';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 const myToolAPIs: myToolAPI = {
   async traverseFolder (path, pFormats) {
     return await ipcRenderer.invoke('tool-traverseFolder', path, pFormats);
+  },
+  async traverseFolderAsync (path, pFormats, perPageNum) {
+    return await ipcRenderer.invoke('tool-traverseFolder-async', path, pFormats, perPageNum);
   },
   async openLink (link) {
     return await ipcRenderer.invoke('tool-openLink', link);
@@ -77,6 +84,9 @@ const myToolAPIs: myToolAPI = {
   },
   async showItemInFolder (src) {
     shell.showItemInFolder(src);
+  },
+  onAsyncImageLinksAppend(handle) {
+    ipcRenderer.on('async:imageLinks-append', handle);
   }
 };
 
