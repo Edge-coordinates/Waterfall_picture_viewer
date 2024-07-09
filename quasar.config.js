@@ -56,6 +56,7 @@ module.exports = configure(function (/* ctx */) {
 
       env: {
         version: JSON.stringify(require('./package.json').version).replace(/^"|"$/g, ''),
+        versionKeys: JSON.stringify(require('./package.json').versionKeys).replace(/^"|"$/g, ''),
       },
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'

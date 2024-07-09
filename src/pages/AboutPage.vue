@@ -39,6 +39,8 @@ function openLink(link: string) {
 }
 
 function getVersion() {
+  // ToDo 测试versionKeys为空时是否正常
+  if(process.env.versionKeys) return process.env.version + ' - ' + process.env.versionKeys
   return process.env.version
 }
 </script>
