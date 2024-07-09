@@ -54,6 +54,10 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16',
       },
 
+      env: {
+        version: JSON.stringify(require('./package.json').version).replace(/^"|"$/g, ''),
+      },
+
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,

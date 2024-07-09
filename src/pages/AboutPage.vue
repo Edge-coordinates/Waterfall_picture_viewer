@@ -11,7 +11,7 @@
       <img src="~assets/20240128.png" class="max-w-sm rounded-lg shadow-2xl" />
       <div>
         <h1 class="text-5xl font-bold">About Program</h1>
-        <p class="text-subtitle2 text-xl">简约瀑布流查看器哦~<br /><b>Version:1.1.2</b></p>
+        <p class="text-subtitle2 text-xl">简约瀑布流查看器哦~<br /><b>Version: {{ getVersion() }}</b></p>
         <button @click="openLink('https://github.com/Edge-coordinates/Waterfall_picture_viewer')"
           class="btn btn-primary">给个Star吧~</button>
       </div>
@@ -36,5 +36,9 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function openLink(link: string) {
   window.myToolAPI.openLink(link)
+}
+
+function getVersion() {
+  return process.env.version
 }
 </script>
