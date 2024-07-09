@@ -3,6 +3,7 @@
 // import remote from '@electron/remote'
 import fs from 'fs-extra';
 import * as path from 'path';
+import AsyncReadFilePath from './AsyncReadFilePath';
 
 // import { promisify } from 'util';
 const sizeOf = require('image-size');
@@ -27,7 +28,7 @@ let picFormats: any[] = [
   '.jfif'
 ];
 
-interface WImage {
+export interface WImage {
   source: string;
   src: string;
   srcThumb: string;
@@ -120,6 +121,12 @@ export function imageRetrieval (thepath, pFormats) {
   traverseFolderObjects(thepath);
   console.log('Finish traverseFolderObjects!');
   return picLinks;
+}
+
+export function imageRetrievalAsync(thepath, pFormats, pageSize) {
+  if (pFormats) picFormats = pFormats;
+  const asyncReadFilePath = new AsyncReadFilePath(thepath, picFormats, pageSize)
+  asyncReadFilePath.readDirectory(thepath)
 }
 // // 开始遍历
 // traverseFolder(rootPath);

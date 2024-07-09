@@ -61,6 +61,9 @@ const props = defineProps({
 })
 
 let oImgs = ref(props.imgs) // 啥玩意《
+watch(() => props.imgs.length, (newImgs) => {
+  oImgs.value = props.imgs
+})
 const inputPageValue = ref(1)
 // import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 // import 'vue-waterfall-plugin-next/dist/style.css'

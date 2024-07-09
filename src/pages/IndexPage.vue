@@ -65,10 +65,11 @@ import type { UploadInst } from 'naive-ui'
 
 import WaterFall from 'components/WaterFall.vue'
 import SetComponent from 'components/SetComponent.vue'
+import type { WImage } from 'app/src-electron/traverseFolder'
 
 const upload = ref<UploadInst | null>()
 const ifImgPreOK = ref<boolean>(false)
-const imgs = ref([])
+const imgs = ref<WImage[]>([])
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
@@ -101,11 +102,18 @@ async function querydb() {
 
 async function picInfoInit(fpath) {
   console.log('picInfoInit')
-  let aa = JSON.parse(JSON.stringify(setStore.getPFormat))
-  console.log(aa)
-  imgs.value = await window.myToolAPI.traverseFolder(fpath, aa)
-  // console.log(imgs.value)
-  ifImgPreOK.value = true
+  const pFormat = JSON.parse(JSON.stringify(setStore.getPFormat))
+  const perPageNum = JSON.parse(JSON.stringify(setStore.getPerPageNum))
+
+  // imgs.value = await window.myToolAPI.traverseFolder(fpath, pFormat)
+  
+  window.myToolAPI.traverseFolderAsync(fpath, pFormat, perPageNum)
+  window.myToolAPI.onAsyncImageLinksAppend((event, taskName, paths) => {
+    if (taskName === fpath) {
+      imgs.value = paths
+      ifImgPreOK.value = true
+    }
+  })
 }
 
 import { normalizePath } from './normalize-path'
