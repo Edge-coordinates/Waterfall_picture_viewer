@@ -10,6 +10,8 @@
           class="bg-gray-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-lg hover:shadow-gray-600 group">
           <a :key="url" :href="url" :data-pswp-width="item.width" :data-pswp-height="item.height"
             :data-source="item.source" class="overflow-hidden">
+            <!-- <a :key="url" :href="url"
+            :data-source="item.source" class="overflow-hidden"> -->
             <LazyImg :url="url" alt=""
               class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" @load="imageLoad"
               @error="imageError" @success="imageSuccess" />
@@ -324,12 +326,18 @@ const options = computed(() => {
 //     }
 //   }
 // })
-
-function imageLoad(url: string) {
+function imageLoad(this: any, url: string) {
   console.log(`${url}: 加载完成`)
+  let img = document.querySelector(String.raw`img[src="${encodeURI(url)}"]`)
+  console.log(img);
   // console.log('update gallery.' + cntt++);
   // gallery = new Viewer(<HTMLElement>document.getElementById('pic-wrapper'), viewerConfig);
   // console.log(gallery);
+
+  let imgurl = `img[src="${encodeURI(String.raw`atom://E:\pictures\测试 图包 中型\甘城日常\甘城日常34.jpg`)}"]`
+  let img2 = document.querySelector(imgurl)
+  console.log(img2);
+  console.log(imgurl);
 }
 
 function imageError(url: string) {
@@ -338,6 +346,7 @@ function imageError(url: string) {
 
 function imageSuccess(url: string) {
   console.log(`${url}: 加载成功`)
+  // let imgs = document.querySelectorAll('.lazy__img')
 }
 </script>
 

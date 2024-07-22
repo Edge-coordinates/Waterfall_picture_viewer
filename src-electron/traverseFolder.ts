@@ -6,7 +6,7 @@ import * as path from 'path';
 import AsyncReadFilePath from './AsyncReadFilePath';
 
 // import { promisify } from 'util';
-const sizeOf = require('image-size');
+import sizeOf from 'image-size';
 
 // 指定要遍历的根路径
 const rootPath = 'D:\\Picture\\五维介质';

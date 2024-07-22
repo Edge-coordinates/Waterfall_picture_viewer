@@ -2,7 +2,7 @@ import { ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { schema } from './default-data';
 
-const fs = require('fs-extra');
+import fs from 'fs-extra';
 import trash from 'trash';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
