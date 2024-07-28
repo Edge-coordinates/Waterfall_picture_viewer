@@ -41,7 +41,7 @@
 
         <q-item clickable v-ripple>
           <i class="fa-sharp fa-regular fa-house-chimney-heart text-base"></i>
-          <p>&nbsp;&nbsp;祝您使用愉快！</p>
+          <p>&nbsp;&nbsp;祝您使用愉快！ {{ $t('hello') }}</p>
         </q-item>
       </q-list>
     </div>
@@ -52,7 +52,7 @@
       </q-fab>
     </q-page-sticky>
   </q-page>
-  <set-component />
+  <settings-layout />
 </template>
 
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
@@ -64,7 +64,8 @@ import { ref } from 'vue'
 import type { UploadInst } from 'naive-ui'
 
 import WaterFall from 'components/WaterFall.vue'
-import SetComponent from 'components/SetComponent.vue'
+import SettingsLayout from 'src/layouts/SettingsLayout.vue'
+// import SetComponent from 'components/SetComponent.vue'
 import type { WImage } from 'app/src-electron/traverseFolder'
 
 const upload = ref<UploadInst | null>()
@@ -106,7 +107,7 @@ async function picInfoInit(fpath) {
   const perPageNum = JSON.parse(JSON.stringify(setStore.getPerPageNum))
 
   // imgs.value = await window.myToolAPI.traverseFolder(fpath, pFormat)
-  
+
   window.myToolAPI.traverseFolderAsync(fpath, pFormat, perPageNum)
   window.myToolAPI.onAsyncImageLinksAppend((event, taskName, paths) => {
     if (taskName === fpath) {

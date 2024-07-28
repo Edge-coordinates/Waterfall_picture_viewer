@@ -9,9 +9,10 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 import { configure } from 'quasar/wrappers';
-import path from 'path';
+// import path from 'path';
+import { fileURLToPath } from 'node:url';
 
-export default configure((/* ctx */) =>{
+export default configure((ctx) => {
   return {
     eslint: {
       // fix: true,
@@ -19,7 +20,7 @@ export default configure((/* ctx */) =>{
       // exclude: [],
       // rawOptions: {},
       warnings: true,
-      errors: true
+      errors: true,
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -37,25 +38,41 @@ export default configure((/* ctx */) =>{
     build: {
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-        node: 'node20'
+        node: 'node20',
       },
 
       env: {
         version: JSON.stringify(require('./package.json').version).replace(
           /^"|"$/g,
-          ''
+          '',
         ),
         versionKeys: JSON.stringify(
-          require('./package.json').versionKeys
-        ).replace(/^"|"$/g, '')
+          require('./package.json').versionKeys,
+        ).replace(/^"|"$/g, ''),
       },
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
-      // vueDevtools,
       // vueOptionsAPI: false,
 
-      // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
+      /**
+       * Automatically open remote Vue Devtools when running in development mode.
+       */
+      // vueDevtools: true,
+      /**
+       * Folder where Quasar CLI should look for .env* files.
+       * Can be an absolute path or a relative path to project root directory.
+       *
+       * @default project root directory
+       */
+      // envFolder: '',
+      /**
+       * Additional .env* files to be loaded.
+       * Each entry can be an absolute path or a relative path to quasar.config > build > envFolder.
+       *
+       * @example ['.env.somefile', '../.env.someotherfile']
+       */
+      // envFiles: [''],
 
       // publicPath: '/',
       // analyze: true,
@@ -74,17 +91,16 @@ export default configure((/* ctx */) =>{
           'vite-plugin-checker',
           {
             vueTsc: {
-              tsconfigPath: 'tsconfig.vue-tsc.json'
+              tsconfigPath: 'tsconfig.vue-tsc.json',
             },
             eslint: {
-              lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"'
-            }
+              lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"',
+            },
           },
-          { server: false }
+          { server: false },
         ],
-
         [
-          '@intlify/vite-plugin-vue-i18n',
+          '@intlify/unplugin-vue-i18n/vite',
           {
             // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
             // compositionOnly: false,
@@ -94,17 +110,18 @@ export default configure((/* ctx */) =>{
             // runtimeOnly: false,
 
             // you need to set i18n resource including paths !
-            include: path.resolve(__dirname, './src/i18n/**')
-          }
-        ]
+            include: [fileURLToPath(new URL('./src/i18n', import.meta.url))],
+            ssr: ctx.modeName === 'ssr',
+          },
+        ],
         // [require('vite-plugin-electron-renderer'), {}],
-      ]
+      ],
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
     },
 
     /**
@@ -121,7 +138,7 @@ export default configure((/* ctx */) =>{
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
@@ -139,7 +156,7 @@ export default configure((/* ctx */) =>{
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [],
     },
 
     // animations: 'all', // --- includes all animations
@@ -175,8 +192,8 @@ export default configure((/* ctx */) =>{
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        'render' // keep this as last one
-      ]
+        'render', // keep this as last one
+      ],
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
@@ -200,13 +217,13 @@ export default configure((/* ctx */) =>{
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
-      hideSplashscreen: true
+      hideSplashscreen: true,
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
     electron: {
       // Electron preload scripts (if any) from /src-electron, WITHOUT file extension
-      preloadScripts: [ 'electron-preload' ],
+      preloadScripts: ['electron-preload'],
 
       // extendElectronMainConf (esbuildConf)
       // extendElectronPreloadConf (esbuildConf)
@@ -232,7 +249,7 @@ export default configure((/* ctx */) =>{
         productName: '瀑布流图片查看器',
         directories: {
           output: 'dist',
-          buildResources: 'buildResources'
+          buildResources: 'buildResources',
         },
         extraResources: ['./public/'],
         // extraFiles: [
@@ -247,7 +264,7 @@ export default configure((/* ctx */) =>{
         // },
         // asar: 'false',
         win: {
-          target: 'nsis'
+          target: 'nsis',
         },
         nsis: {
           include: './builder-nsis.nsh',
@@ -260,17 +277,17 @@ export default configure((/* ctx */) =>{
           installerHeaderIcon: './public/icons/icon.ico', // 安装时头部图标
           createDesktopShortcut: true, // 创建桌面图标
           createStartMenuShortcut: true, // 创建开始菜单图标
-          shortcutName: '瀑布流图片查看器' // 图标名称
-        }
-      }
+          shortcutName: '瀑布流图片查看器', // 图标名称
+        },
+      },
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
     bex: {
-      contentScripts: ['my-content-script']
+      contentScripts: ['my-content-script'],
 
       // extendBexScriptsConf (esbuildConf) {}
       // extendBexManifestJson (json) {}
-    }
+    },
   };
 });

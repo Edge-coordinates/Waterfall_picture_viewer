@@ -23,7 +23,7 @@ declare module 'vue-i18n' {
 
 export default boot(({ app }) => {
   const i18n = createI18n({
-    locale: 'en-US',
+    locale: 'zh-CN',
     legacy: false,
     messages,
   });

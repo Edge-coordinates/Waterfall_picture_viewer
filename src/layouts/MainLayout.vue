@@ -9,6 +9,7 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
         <q-icon name="mdi-view-dashboard"></q-icon>
         <div class="font-bold">Img View</div>
         <div class="cursor-pointer non-selectable q-electron-drag--exception">
+        <!-- ANCHOR File  -->
           File
           <q-menu>
             <q-list dense style="min-width: 100px">
@@ -56,6 +57,7 @@ https://quasar.dev/quasar-cli-vite/developing-electron-apps/frameless-electron-w
         </div>
 
         <div class="q-ml-md cursor-pointer non-selectable q-electron-drag--exception">
+          <!-- ANCHOR Edit -->
           Edit
           <q-menu auto-close>
             <q-list dense style="min-width: 100px">

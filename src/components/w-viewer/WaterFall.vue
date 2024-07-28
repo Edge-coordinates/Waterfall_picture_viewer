@@ -12,10 +12,10 @@
             :data-source="item.source" class="overflow-hidden">
             <!-- <a :key="url" :href="url"
             :data-source="item.source" class="overflow-hidden"> -->
-            <LazyImg :url="url" alt=""
-              class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" @load="imageLoad(url, $event)"
-              @error="imageError" @success="imageSuccess" />
-            <!-- <img :src="url" alt="" class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" /> -->
+            <!-- <LazyImg :url="url" alt=""
+              class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" @load="imageLoad"
+              @error="imageError" @success="imageSuccess" /> -->
+            <img :src="url" alt="" class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" />
           </a>
           <!-- <div class="px-4 pt-2 pb-4 border-t border-t-gray-800">
             <h2 class="pb-4 text-gray-50 group-hover:text-yellow-300">
@@ -28,7 +28,6 @@
     </Waterfall>
   </div>
   <!-- <WPagination /> -->
-  <!-- ANCHOR 页码 -->
   <q-page-sticky position="bottom-left" :offset="[18, 18]">
     <!-- 样式调整！！！！ -->
     <div class="q-pa-lg rounded-full bg-blue-300 bg-opacity-70">
@@ -46,8 +45,8 @@
 <script setup lang="ts">
 import { NInputNumber } from 'naive-ui'
 import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue'
-import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next'
-// import WPagination from './WPagination.vue'
+import { Waterfall } from 'vue-waterfall-plugin-next'
+import WPagination from './WPagination.vue'
 // 重新处理
 // import type { ViewCard } from './waterfall'
 import 'vue-waterfall-plugin-next/dist/style.css'
@@ -114,7 +113,7 @@ function scrollToTop() {
 
 // 加载更多
 function handleLoadMore() {
-  // console.log('handleLoadMore!');
+  console.log('handleLoadMore!');
   getList({
     page: page.value,
     pageSize: setStore.perPageNum,
@@ -328,8 +327,18 @@ const options = computed(() => {
 //     }
 //   }
 // })
-function imageLoad(url: string, event: any) {
+function imageLoad(this: any, url: string) {
   console.log(`${url}: 加载完成`)
+  let img = document.querySelector(String.raw`img[src="${encodeURI(url)}"]`)
+  console.log(img);
+  // console.log('update gallery.' + cntt++);
+  // gallery = new Viewer(<HTMLElement>document.getElementById('pic-wrapper'), viewerConfig);
+  // console.log(gallery);
+
+  // let imgurl = `img[src="${encodeURI(String.raw`atom://E:\pictures\测试 图包 中型\甘城日常\甘城日常34.jpg`)}"]`
+  // let img2 = document.querySelector(imgurl)
+  // console.log(img2);
+  // console.log(imgurl);
 }
 
 function imageError(url: string) {
