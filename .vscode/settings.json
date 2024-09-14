@@ -12,11 +12,13 @@
     "fpath",
     "fullfpath",
     "photoswipe",
+    "pinia",
     "pswp",
     "todos",
-    "viewerjs"
+    "viewerjs",
+    "Wviewer"
   ],
   "[vue]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

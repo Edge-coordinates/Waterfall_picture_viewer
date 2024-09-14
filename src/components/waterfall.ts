@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /*
  * @Author: Yaowen Liu
  * @Date: 2022-03-17 14:41:05

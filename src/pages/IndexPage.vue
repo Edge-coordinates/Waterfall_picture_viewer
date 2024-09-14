@@ -1,12 +1,15 @@
 <template>
   <q-page style="margin-top: 20px;">
-    <div v-if="ifImgPreOK" class="h-full">
-      <water-fall :imgs="imgs"></water-fall>
+    <div v-if="ifLoadPath" class="h-full">
+      <water-fall-layout :fpath="fpath"></water-fall-layout>
       <!-- <water-fall /> -->
     </div>
     <div v-else class="flex justify-center">
       <n-config-provider :locale="zhCN" :date-locale="dateZhCN" class="w-11/12">
-        <n-upload ref="upload" directory directory-dnd :on-change="onUpload" :max="1" :default-upload="false"
+        <!-- <n-upload ref="upload" directory directory-dnd :on-change="onUpload" :max="1" :default-upload="false"
+          :show-file-list="false"> -->
+        <n-upload ref="upload" directory directory-dnd @dragover="handleDragOver"
+        @drop="handleDrop" :max="1" :default-upload="false"
           :show-file-list="false">
           <n-upload-dragger>
             <div style="margin-bottom: 12px">
@@ -22,7 +25,7 @@
         </n-upload>
       </n-config-provider>
     </div>
-    <div v-if="!ifImgPreOK" class="mx-2.5 my-4">
+    <div v-if="!ifLoadPath" class="mx-2.5 my-4">
       <p class="text-h6">Tips:</p>
       <q-list separator>
         <q-item v-ripple>
@@ -63,32 +66,50 @@ import { zhCN, dateZhCN } from 'naive-ui'
 import { ref } from 'vue'
 import type { UploadInst } from 'naive-ui'
 
-import WaterFall from 'components/WaterFall.vue'
+import WaterFallLayout from 'layouts/WViewerLayout.vue'
 import SettingsLayout from 'src/layouts/SettingsLayout.vue'
 // import SetComponent from 'components/SetComponent.vue'
-import type { WImage } from 'app/src-electron/traverseFolder'
 
+const ifLoadPath = ref<boolean>(false)
 const upload = ref<UploadInst | null>()
-const ifImgPreOK = ref<boolean>(false)
-const imgs = ref<WImage[]>([])
+let fpath = ref<string>('')
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
 
 
 function openSetModal() {
-
-  console.log('ddd')
+  // init setting data
   querydb()
   setStore.isOpen = true
-  console.log(setStore.isOpen)
 }
 
-function stateInitialization() {
-  upload.value?.clear()
-  imgs.value = []
-  ifImgPreOK.value = false
-  console.log(imgs.value)
+function handleDragOver(event: DragEvent) {
+  event.preventDefault();
+}
+
+let selectedFolderPaths = ref<string[]>([]);
+
+function handleDrop(event: DragEvent) {
+  event.preventDefault();
+  console.log(event);
+  const items = event.dataTransfer?.items;
+  if (items) {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i].webkitGetAsEntry();
+      if (item && item.isDirectory) {
+        console.log(item);
+        // const directoryReader = item.createReader();
+        // directoryReader.readEntries((entries) => {
+        //   for (let j = 0; j < entries.length; j++) {
+        //     if (entries[j].isDirectory) {
+        //       selectedFolderPaths.value.push(entries[j].fullPath);
+        //     }
+        //   }
+        // });
+      }
+    }
+  }
 }
 
 async function querydb() {
@@ -101,21 +122,6 @@ async function querydb() {
   // })
 }
 
-async function picInfoInit(fpath) {
-  console.log('picInfoInit')
-  const pFormat = JSON.parse(JSON.stringify(setStore.getPFormat))
-  const perPageNum = JSON.parse(JSON.stringify(setStore.getPerPageNum))
-
-  // imgs.value = await window.myToolAPI.traverseFolder(fpath, pFormat)
-
-  window.myToolAPI.traverseFolderAsync(fpath, pFormat, perPageNum)
-  window.myToolAPI.onAsyncImageLinksAppend((event, taskName, paths) => {
-    if (taskName === fpath) {
-      imgs.value = paths
-      ifImgPreOK.value = true
-    }
-  })
-}
 
 import { normalizePath } from './normalize-path'
 
@@ -129,12 +135,21 @@ function getFolderPath(fpath, fullfpath) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function onUpload(e: any) {
   console.log('onUpload!');
+  console.log(e);
   // ! 修改计算逻辑，不用正则了，采用原始字符串匹配？
-  let fpath = e.file.fullPath // 相对路径
+  let tmpFpath = e.file.fullPath // 相对路径
   const fullfpath = e.file.file.path // 绝对路径
-  fpath = getFolderPath(fpath, fullfpath)
-  console.log(fpath);
+  fpath.value = getFolderPath(tmpFpath, fullfpath)
+  console.log(fpath.value);
 
-  picInfoInit(fpath)
+  ifLoadPath.value = true
+  // picInfoInit(fpath)
+}
+
+function stateInitialization() {
+  upload.value?.clear()
+  ifLoadPath.value = false
+  // The logic for modifying the Imgs array should be moved to the Layout file
+  // use watch function
 }
 </script>

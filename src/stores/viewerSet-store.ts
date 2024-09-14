@@ -1,5 +1,12 @@
 import { defineStore } from 'pinia';
 
+/**
+ * Defines a Pinia store named 'setting'.
+ *
+ * This store is used to manage application settings.
+ *
+ * @constant {StoreDefinition} useSettingStore - The Pinia store definition for settings.
+ */
 export const useSettingStore = defineStore('setting', {
   state: () => ({
     isOpen: false,
@@ -21,15 +28,15 @@ export const useSettingStore = defineStore('setting', {
         rowPerView: 5
       },
       1200: {
-        // 当屏幕宽度小于等于1200
+        // When the screen width is less than or equal to 1200
         rowPerView: 4
       },
       800: {
-        // 当屏幕宽度小于等于800
+        // When the screen width is less than or equal to 800
         rowPerView: 3
       },
       500: {
-        // 当屏幕宽度小于等于500
+        // When the screen width is less than or equal to 500
         rowPerView: 2
       }
     },
