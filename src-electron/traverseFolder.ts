@@ -9,7 +9,7 @@ import AsyncReadFilePath from './AsyncReadFilePath';
 import sizeOf from 'image-size';
 
 // 指定要遍历的根路径
-const rootPath = 'D:\\Picture\\五维介质';
+// const rootPath = 'D:\\Picture\\五维介质';
 
 // 存储图片文件链接的数组
 // 数据结构更改：使用对象数组，同时使用 map 维护数组下标，异步获取图片大小和其他参数。
@@ -27,14 +27,48 @@ let picFormats: any[] = [
   '.bmp',
   '.jfif'
 ];
+let videoFormats: any[] = [
+  '.mp4',
+  '.webm',
+]
 
 export interface WImage {
   source: string;
-  src: string;
+  src: string|any;
   srcThumb: string;
   width?: number;
   height?: number;
+  isVideo?: boolean;
+  originalSrc?: string;
 }
+
+function isPathDirectory (thepath: string) {
+  const thefile = fs.statSync(thepath);
+  return thefile.isDirectory();
+}
+
+export function imageRetrieval (thepath, pFormats) {
+  if (pFormats) picFormats = pFormats;
+  // console.log(pFormats, picFormats);
+  // 清空
+  imageLinks = [];
+  picLinks = [];
+  traverseFolderObjects(thepath);
+  console.log('Finish traverseFolderObjects!');
+  return picLinks;
+}
+
+export function imageRetrievalAsync(thepath, pFormats, vFormats, pageSize) {
+  if (pFormats) picFormats = pFormats;
+  if (vFormats) videoFormats = vFormats;
+  const asyncReadFilePath = new AsyncReadFilePath(thepath, picFormats, videoFormats, pageSize)
+  asyncReadFilePath.readDirectory(thepath)
+}
+// // 开始遍历
+// traverseFolder(rootPath);
+
+// // 打印图片链接列表
+// console.log(imageLinks);
 
 // 递归遍历文件夹
 export function traverseFolder (currentPath) {
@@ -106,30 +140,3 @@ function traverseFolderObjects (currentPath) {
     }
   }
 }
-
-function isPathDirectory (thepath: string) {
-  const thefile = fs.statSync(thepath);
-  return thefile.isDirectory();
-}
-
-export function imageRetrieval (thepath, pFormats) {
-  if (pFormats) picFormats = pFormats;
-  // console.log(pFormats, picFormats);
-  // 清空
-  imageLinks = [];
-  picLinks = [];
-  traverseFolderObjects(thepath);
-  console.log('Finish traverseFolderObjects!');
-  return picLinks;
-}
-
-export function imageRetrievalAsync(thepath, pFormats, pageSize) {
-  if (pFormats) picFormats = pFormats;
-  const asyncReadFilePath = new AsyncReadFilePath(thepath, picFormats, pageSize)
-  asyncReadFilePath.readDirectory(thepath)
-}
-// // 开始遍历
-// traverseFolder(rootPath);
-
-// // 打印图片链接列表
-// console.log(imageLinks);

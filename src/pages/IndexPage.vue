@@ -8,7 +8,7 @@
       <n-config-provider :locale="zhCN" :date-locale="dateZhCN" class="w-11/12">
         <!-- <n-upload ref="upload" directory directory-dnd :on-change="onUpload" :max="1" :default-upload="false"
           :show-file-list="false"> -->
-        <n-upload ref="upload" directory directory-dnd @dragover="handleDragOver"
+        <n-upload ref="upload" directory directory-dnd @change="onUpload" @dragover="handleDragOver"
         @drop="handleDrop" :max="1" :default-upload="false"
           :show-file-list="false">
           <n-upload-dragger>
@@ -132,6 +132,8 @@ function getFolderPath(fpath, fullfpath) {
   return fullfpath.replace(fpath, root)
 }
 
+// https://www.naiveui.com/zh-CN/os-theme/components/upload
+// TODO there is a multiple props in the upload component, try to use it
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function onUpload(e: any) {
   console.log('onUpload!');

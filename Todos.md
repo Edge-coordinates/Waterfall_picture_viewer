@@ -10,6 +10,10 @@
 
 
 ## 自定义灯箱
+新解决方案，用 bigger-picture 重构，目前唯一问题就是 视频尺寸
+
+https://codesandbox.io/p/sandbox/bigger-picture-video-hua-lang-forked-8gdtlj
+
 通过
 https://photoswipe.com/data-sources/#custom-html-markup
 实现动态的获取图片/视频的尺寸

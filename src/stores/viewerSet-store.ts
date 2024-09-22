@@ -22,6 +22,10 @@ export const useSettingStore = defineStore('setting', {
       '.bmp',
       '.jfif'
     ],
+    videoFormat: [
+      '.mp4',
+      '.webm',
+    ],
     vNavbar: 1,
     waterfallBreakpoint: {
       1400: {
@@ -45,6 +49,7 @@ export const useSettingStore = defineStore('setting', {
   getters: {
     // doubleCount: state => state.counter * 2
     getPFormat: state => state.imageFormat,
+    getVFormat: state => state.videoFormat,
     getPerPageNum: state => state.perPageNum,
   },
   actions: {
@@ -53,3 +58,25 @@ export const useSettingStore = defineStore('setting', {
     }
   }
 });
+
+/*
+TODO - List of videos waiting to be supported by other methods
+'.mkv',
+'.flv',
+'.avi',
+'.mov',
+'.wmv',
+'.rmvb',
+'.rm',
+'.asf',
+'.mpg',
+'.mpeg',
+'.m4v',
+'.3gp',
+'.3g2',
+'.f4v',
+'.hlv',
+'.swf',
+'.vob',
+'.ts',
+*/

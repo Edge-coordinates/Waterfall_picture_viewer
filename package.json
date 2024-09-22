@@ -18,6 +18,7 @@
   "dependencies": {
     "@electron/remote": "^2.1.2",
     "@quasar/extras": "^1.16.12",
+    "bigger-picture": "^1.1.17",
     "electron-store": "^8.1.0",
     "fs-extra": "^11.2.0",
     "image-size": "^1.1.1",

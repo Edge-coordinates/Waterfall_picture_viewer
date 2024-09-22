@@ -21,8 +21,10 @@
 <script setup lang="ts">
 import { NInputNumber } from 'naive-ui'
 import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue'
-import Wviewer from 'components/WaterFall.vue'
+import Wviewer from 'components/WaterFall_full.vue'
 // import WviewerViewerjs from 'components/WaterFall_viewerjs.vue'
+
+// TODO 传入参数有问题，每次更新都会导致查看器UPDATE，这是没有必要的，除非查看器截取部分确实发生了变化（页面内图片更新）
 
 const ifImgPreOK = ref<boolean>(false)
 const props = defineProps({
@@ -45,11 +47,12 @@ const list = ref<any>([])
 async function picInfoInit(fpath) {
   console.log('picInfoInit', fpath)
   const pFormat = JSON.parse(JSON.stringify(setStore.getPFormat))
+  const vFormat = JSON.parse(JSON.stringify(setStore.getVFormat))
   const perPageNum = JSON.parse(JSON.stringify(setStore.getPerPageNum))
 
   // imgs.value = await window.myToolAPI.traverseFolder(fpath, pFormat)
 
-  window.myToolAPI.traverseFolderAsync(fpath, pFormat, perPageNum)
+  window.myToolAPI.traverseFolderAsync(fpath, pFormat, vFormat,perPageNum)
   window.myToolAPI.onAsyncImageLinksAppend((event, taskName, paths) => {
     if (taskName === fpath) {
       wViewerStateStore.imgs = paths
@@ -157,6 +160,7 @@ function tEventListening() { // * Listening to some messy events
 onMounted(() => {
   console.log('WViewerLayout onMounted');
   picInfoInit(props.fpath)
+  wViewerStateStore.ifViewerOpen = false
   tEventListening()
 })
 

@@ -1,83 +1,106 @@
 <template>
-<div id="pic-wrapper" class="page-b-content">
-  <Waterfall :list="imgs" :row-key="options.rowKey" :gutter="options.gutter"
-    :has-around-gutter="options.hasAroundGutter" :width="options.width" :breakpoints="options.breakpoints"
-    :img-selector="options.imgSelector" :background-color="options.backgroundColor" :lazyload="options.lazyload"
-    :load-props="options.loadProps">
-    <template #item="{ item, url }">
-      <div
-        class="bg-gray-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-lg hover:shadow-gray-600 group">
-        <a :key="url" :href="url" :data-pswp-width="item.width" :data-pswp-height="item.height"
-          :data-source="item.source" class="overflow-hidden">
-          <!-- <a :key="url" :href="url"
+  <div id="pic-wrapper" class="page-b-content">
+    <Waterfall
+      :list="imgs"
+      :row-key="options.rowKey"
+      :gutter="options.gutter"
+      :has-around-gutter="options.hasAroundGutter"
+      :width="options.width"
+      :breakpoints="options.breakpoints"
+      :img-selector="options.imgSelector"
+      :background-color="options.backgroundColor"
+      :lazyload="options.lazyload"
+      :load-props="options.loadProps"
+    >
+      <template #item="{ item, url }">
+        <div
+          class="bg-gray-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-lg hover:shadow-gray-600 group"
+        >
+          <a
+            :key="url"
+            :href="url"
+            :data-pswp-width="item.width"
+            :data-pswp-height="item.height"
+            :data-source="item.source"
+            class="overflow-hidden"
+          >
+            <!-- <a :key="url" :href="url"
           :data-source="item.source" class="overflow-hidden"> -->
-          <LazyImg :url="url" alt=""
-            class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" @load="imageLoad(url, $event)"
-            @error="imageError" @success="imageSuccess" />
-          <!-- <img :src="url" alt="" class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" /> -->
-        </a>
-        <!-- <div class="px-4 pt-2 pb-4 border-t border-t-gray-800">
+            <LazyImg
+              :url="url"
+              alt=""
+              class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105"
+              @load="imageLoad(url, $event)"
+              @error="imageError"
+              @success="imageSuccess"
+            />
+            <!-- <img :src="url" alt="" class="cursor-pointer transition-all duration-300 ease-linear group-hover:scale-105" /> -->
+          </a>
+          <!-- <div class="px-4 pt-2 pb-4 border-t border-t-gray-800">
           <h2 class="pb-4 text-gray-50 group-hover:text-yellow-300">
             {{ item }}
             + {{ url }}
           </h2>
         </div> -->
-      </div>
-    </template>
-  </Waterfall>
-</div>
+        </div>
+      </template>
+    </Waterfall>
+  </div>
 </template>
 
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-import { NInputNumber } from 'naive-ui'
-import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue'
-import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next'
+import { NInputNumber } from 'naive-ui';
+import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue';
+import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next';
 // import WPagination from './WPagination.vue'
 // 重新处理
 // import type { ViewCard } from './waterfall'
-import 'vue-waterfall-plugin-next/dist/style.css'
+import 'vue-waterfall-plugin-next/dist/style.css';
 
 import { useSettingStore } from 'stores/viewerSet-store';
-const setStore = useSettingStore()
+const setStore = useSettingStore();
 import { useWViewerStateStore } from 'stores/wViewerState-store';
-const wViewerStateStore = useWViewerStateStore()
+const wViewerStateStore = useWViewerStateStore();
 
 const props = defineProps({
   imgs: {
     type: Array<any>,
     default(rawProps) {
-      return []
-    }
-  }
-})
+      return [];
+    },
+  },
+});
 // import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 // import 'vue-waterfall-plugin-next/dist/style.css'
 // import { getList } from '../api'
-import loading from 'assets/loading.png'
-import error from 'assets/error.png'
+import loading from 'assets/loading.png';
+import error from 'assets/error.png';
 
 // ANCHOR 查看器初始化
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
-let lightbox: any, thisPic: string
-let isLightboxOpen = ref(false)
+let lightbox: any, thisPic: string;
+let isLightboxOpen = ref(false);
 
-function handleViewerKeyDown(event) {// * 查看器内部 检查是否按下了特定的键，例如 Ctrl + S
+function handleViewerKeyDown(event) {
+  // * 查看器内部 检查是否按下了特定的键，例如 Ctrl + S
   if (event.key === 'Delete') {
     event.preventDefault(); // 阻止默认行为（例如保存网页）
     console.log('pressed Delete.');
     // let pswpImgSrc: any = document.querySelector('img.pswp__img')
     // pswpImgSrc = <string>pswpImgSrc!.getAttribute('src').replace(/atom:\/\//g, '')
     // pswpImgSrc = decodeURIComponent(pswpImgSrc)
-    let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '')
-    console.log(pswpImgSrc)
+    let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '');
+    console.log(pswpImgSrc);
     if (confirm('确定要删除图片嘛？')) {
-      window.myToolAPI.delPic(pswpImgSrc)
+      window.myToolAPI.delPic(pswpImgSrc);
       // console.log(getFolder(pswpImgSrc, /atom:\/\//g))
       // 在瀑布流中删除图片！！
-      const indexToDelete = wViewerStateStore.imgs.findIndex((img: any) => img.source === pswpImgSrc)
+      const indexToDelete = wViewerStateStore.imgs.findIndex(
+        (img: any) => img.source === pswpImgSrc,
+      );
       if (indexToDelete !== -1) {
         wViewerStateStore.imgs.splice(indexToDelete, 1);
         console.log(`Object with source '${pswpImgSrc}' deleted.`);
@@ -111,11 +134,13 @@ onMounted(() => {
           // if (confirm('Do you want to toggle zoom?')) {
           //   lightbox.pswp.toggleZoom();
           // }
-          let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '')
-          window.myToolAPI.showItemInFolder(pswpImgSrc)
+          let pswpImgSrc = decodeURIComponent(thisPic).replace(
+            /atom:\/\//g,
+            '',
+          );
+          window.myToolAPI.showItemInFolder(pswpImgSrc);
           // alert('回头再做的在文件夹打开。')
-
-        }
+        },
       });
       lightbox.pswp.ui.registerElement({
         name: 'open-button',
@@ -127,44 +152,46 @@ onMounted(() => {
           // if (confirm('Do you want to toggle zoom?')) {
           //   lightbox.pswp.toggleZoom();
           // }
-          let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '')
-          window.myToolAPI.openPath(pswpImgSrc)
+          let pswpImgSrc = decodeURIComponent(thisPic).replace(
+            /atom:\/\//g,
+            '',
+          );
+          window.myToolAPI.openPath(pswpImgSrc);
           // alert('回头再做的在文件夹打开。')
-
-        }
+        },
       });
     });
 
     lightbox.on('contentActivate', ({ content }) => {
       console.log('contentActivate', content.data.src);
-      thisPic = content.data.src
+      thisPic = content.data.src;
     });
 
     lightbox.on('openingAnimationStart', () => {
       // 开始监听 查看器内 快捷键
       document.addEventListener('keydown', handleViewerKeyDown);
-      isLightboxOpen.value = true
-      wViewerStateStore.ifViewerOpen = true
+      isLightboxOpen.value = true;
+      wViewerStateStore.ifViewerOpen = true;
       console.log('openingAnimationStart');
     });
 
     lightbox.on('closingAnimationStart', () => {
       document.removeEventListener('keydown', handleViewerKeyDown);
-      isLightboxOpen.value = false
-      wViewerStateStore.ifViewerOpen = false
+      isLightboxOpen.value = false;
+      wViewerStateStore.ifViewerOpen = false;
       console.log('closingAnimationStart');
     });
 
     lightbox.init();
   }
-})
+});
 
 onUnmounted(() => {
   if (lightbox) {
     lightbox.destroy();
     lightbox = null;
   }
-})
+});
 
 const options = computed(() => {
   return {
@@ -196,8 +223,8 @@ const options = computed(() => {
     // 是否懒加载
     lazyload: false,
     crossOrigin: false,
-  }
-})
+  };
+});
 
 // import 'viewerjs/dist/viewer.css'
 // import { directive as viewer } from 'v-viewer'
@@ -235,7 +262,7 @@ function imageLoad(url: string, event: any) {
 }
 
 function imageError(url: string) {
-  console.error(`${url}: 加载失败`)
+  console.error(`${url}: 加载失败`);
 }
 
 function imageSuccess(url: string) {
@@ -247,14 +274,14 @@ function imageSuccess(url: string) {
 <style>
 .viewer-info {
   color: #fff;
-  font-family: "Font Awesome 6 Pro";
+  font-family: 'Font Awesome 6 Pro';
   font-size: 0.75rem;
   line-height: 1.5rem;
   text-align: center;
 }
 
 .viewer-info::before {
-  content: "\f129";
+  content: '\f129';
 }
 
 /*

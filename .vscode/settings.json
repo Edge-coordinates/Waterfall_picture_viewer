@@ -11,9 +11,12 @@
     "autorenew",
     "fpath",
     "fullfpath",
+    "lazyload",
     "photoswipe",
     "pinia",
     "pswp",
+    "thefile",
+    "thepath",
     "todos",
     "viewerjs",
     "Wviewer"
