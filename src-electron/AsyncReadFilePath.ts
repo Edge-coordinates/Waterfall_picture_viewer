@@ -30,11 +30,24 @@ export default class AsyncReadFilePath {
     this.pageSize = pageSize || 20;
   }
 
-  async readDirectory(dir: string) {
-    const stack = [dir];
+  async readDirectory(dir: String | Array<any>) {
+    const stack: any = (() => {
+      if (typeof dir === 'string') {
+        return [dir]; // use this way to avoid judgment of empty strings
+      }
+      if (Array.isArray(dir)) {
+        // Array
+        dir.sort((a, b) =>
+          b.localeCompare(a, undefined, { sensitivity: 'base' }),
+        );
+        return dir;
+      }
+      return '';
+    })();
     const pageStack = [] as WImage[];
 
     while (stack.length) {
+      // console.log('stack', stack);
       // prioritize in depth
       const currentPath = stack.pop();
       if (!currentPath) {
@@ -55,6 +68,7 @@ export default class AsyncReadFilePath {
           if (this.picFormats.includes(extname)) {
             await sizeOf(fullPath)
               .then((dimensions) => {
+                console.log('sizeOf', dimensions);
                 result.push({
                   source: fullPath,
                   src: 'atom://' + fullPath,
@@ -73,7 +87,10 @@ export default class AsyncReadFilePath {
               isVideo: true,
               source: fullPath,
               originalSrc: 'atom://' + fullPath,
-              src: { src: 'atom://' + fullPath, type: 'video/' + extname.substring(1) },
+              src: {
+                src: 'atom://' + fullPath,
+                type: 'video/' + extname.substring(1),
+              },
               srcThumb: 'atom://' + fullPath,
               width: 1920,
               height: 1080,
@@ -88,14 +105,16 @@ export default class AsyncReadFilePath {
       }
     }
 
+    console.log('pageStack', pageStack);
     if (pageStack.length) {
-      this.picLinks.push(...pageStack.splice(0, pageStack.length - 1));
+      this.picLinks.push(...pageStack.splice(0, pageStack.length));
       this.taskReport();
     }
   }
 
   taskReport() {
     if (mainWindow && this.picLinks.length) {
+      console.log('taskReport', this.picLinks.length);
       mainWindow.webContents.send(
         'async:imageLinks-append',
         this.taskName,

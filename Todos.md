@@ -1,4 +1,31 @@
+- [Part1](#part1)
+  - [缩略图](#缩略图)
+  - [当前版本记事](#当前版本记事)
+  - [Bugs](#bugs)
+- [规范化](#规范化)
+- [自定义灯箱](#自定义灯箱)
+- [TODO](#todo)
+- [布局](#布局)
+
+## Part1
+### 缩略图
+支援缩略图目录，及同级目录下有 thumbnails 文件夹都支援（及读取图片的时候判断一下同级目录下是否有 thumbnails 文件夹 或者 根目录下 有无 thumbnails 及 thumbnails文件夹内是否有该图片的缩略图）
+该结构受 Steam 支持？
+
+### 当前版本记事
+- Fix 文件读取少读的Bug
+-
+
+### Bugs
+- [ ] 直接记录时当文件夹中文件个数小于pagenumber时，会发生读少的情况
+- [ ] 长文件名（中间有空格和-的文件名）展示错误："kieed23232 - 1829852267304140916 - Copy (2).gif"
 - [ ]  当重载新的文件夹，应当放弃对旧文件夹的读取，防止旧文件夹非常大，浪费过多的时间去读
+
+
+## 规范化
+- 规范后端交互接口，可以让不同的前端给出不同的收集要求，比如photoswipe需要大小，viewerjs不需要。
+
+
 - https://github.com/dimsemenov/photoswipe-video-plugin
 我仍然想知道，是否自己重写灯箱，或者利用好现有灯箱
 
@@ -7,7 +34,6 @@
 将所有逻辑独立出来，toolbox, 比如图片删除逻辑，应该是公用的才对
 
 还是研究 Photoswipe 的 API 以及插件的运作方式吧。。。
-
 
 ## 自定义灯箱
 新解决方案，用 bigger-picture 重构，目前唯一问题就是 视频尺寸
@@ -31,7 +57,9 @@ https://photoswipe.com/data-sources/#custom-html-markup
 - 不要把分页移出去，把查看器移出去，然后把现在的 Wviewer 放到 Layout 里面？
 - 把 setting 也放到 Layout 里面
 
-## 任务
+## TODO
+- [ ] 浏览器开发者插件: https://devtools.vuejs.org/guide/standalone
+- [ ] 打包大小分析
 
 - 优化文件夹获取算法
 

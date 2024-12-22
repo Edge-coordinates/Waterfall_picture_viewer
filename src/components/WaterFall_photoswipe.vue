@@ -226,37 +226,6 @@ const options = computed(() => {
   };
 });
 
-// import 'viewerjs/dist/viewer.css'
-// import { directive as viewer } from 'v-viewer'
-// const vViewer = viewer({
-//   debug: true,
-// })
-
-// let viewerConfig = reactive({
-//   navbar: 0,
-//   toolbar: {
-//     zoomIn: 3,
-//     zoomOut: 3,
-//     oneToOne: 2,
-//     reset: 2,
-//     prev: 2,
-//     play: {
-//       show: 2,
-//       size: 'large'
-//     },
-//     next: 2,
-//     rotateLeft: 2,
-//     rotateRight: 2,
-//     flipHorizontal: 2,
-//     flipVertical: 2,
-
-//     info: function () {
-//       // console.log('info');
-//       alert('以后再做的文件详细信息展示');
-//       console.log(error)
-//     }
-//   }
-// })
 function imageLoad(url: string, event: any) {
   // console.log(`${url}: 加载完成`)
 }

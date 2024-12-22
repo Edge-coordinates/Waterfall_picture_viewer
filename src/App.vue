@@ -14,13 +14,15 @@ import { onMounted } from 'vue'
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
+// Data INIT
 async function initData() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let tmpdata: any
   if (tmpdata = await window.storeAPI.get('itemNum')) setStore.perPageNum = tmpdata
   if (tmpdata = await window.storeAPI.get('WBreakpoint')) setStore.waterfallBreakpoint = tmpdata
-  if (tmpdata = await window.storeAPI.get('cycleUpdate')) setStore.cycleUpdate = tmpdata
   // console.log(await window.storeAPI.get('WBreakpoint'), setStore.waterfallBreakpoint)
+  if (tmpdata = await window.storeAPI.get('cycleUpdate')) setStore.cycleUpdate = tmpdata
+  if (tmpdata = await window.storeAPI.get('viewerName')) setStore.viewerName = tmpdata
   console.log('APP setData inited!')
 }
 

@@ -54,6 +54,8 @@
                     保存设置
                   </q-tooltip></q-btn>
                 <!-- <div>是否开启图片查看器画廊：<q-toggle disable v-model="simpleSetData.vNavbar" /></div> -->
+                <!-- Viewer Selection -->
+                <viewer-selection :save-data="saveData"></viewer-selection>
                 <div>
                   <br />
                   <q-list separator>
@@ -143,6 +145,8 @@ import { NDynamicInput } from 'naive-ui'
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
 
+import ViewerSelection from 'components/settings/ViewerSelection.vue';
+
 const simpleSetData = reactive({
   perPageNum: null,
   imageFormat: setStore.imageFormat.join(', '),
@@ -183,6 +187,7 @@ function updateStore() {
   // console.log(WBV2WB(WBValue.value))
 }
 
+// ANCHOR Save Data
 function saveData(id) {
   console.log('saved!', id)
   switch (id) {
@@ -196,6 +201,9 @@ function saveData(id) {
       break
     case 'cycleUpdate':
       window.storeAPI.set('cycleUpdate', setStore.cycleUpdate)
+      break
+    case 'viewerName':
+      window.storeAPI.set('viewerName', setStore.viewerName)
       break
   }
 }

@@ -36,7 +36,7 @@
             :key="url"
             :data-width="item.width"
             :data-height="item.height"
-            :data-img="url"
+            :data-img="url.replace(/ /g, '%20')"
             :data-source="item.source"
             class="overflow-hidden"
           >
@@ -94,7 +94,7 @@ import BiggerPicture from 'bigger-picture';
 // import style
 import 'bigger-picture/css';
 // bp: BiggerPicture instance
-let bp: any, imageLinks: any, thisPic: string;
+let bp: any, imageLinks: any, thisPic: string = '';
 // Waterfall initialization
 import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next';
 import 'vue-waterfall-plugin-next/dist/style.css';

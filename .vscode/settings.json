@@ -7,6 +7,8 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "i18n-ally.localesPaths": ["src/i18n"],
+  "i18n-ally.displayLanguage": "zh-CN",
+  "i18n-ally.enabledParsers": ["js", "ts"],
   "cSpell.words": [
     "autorenew",
     "fpath",
@@ -23,5 +25,6 @@
   ],
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "i18n-ally.keystyle": "nested"
 }

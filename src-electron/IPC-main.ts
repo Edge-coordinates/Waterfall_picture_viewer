@@ -1,4 +1,4 @@
-import { ipcMain, shell } from 'electron';
+import { BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import Store from 'electron-store';
 import { schema } from './default-data';
 
@@ -6,7 +6,7 @@ import fs from 'fs-extra';
 import trash from 'trash';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isFileSync (path) {
+function isFileSync(path) {
   try {
     // 使用 fs.existsSync 检查路径是否存在
     if (fs.existsSync(path)) {
@@ -28,20 +28,21 @@ let store = new Store();
 
 import { imageRetrieval, imageRetrievalAsync } from './traverseFolder';
 
-export function data_init () {
+export function data_init() {
   if (!store.get('itemNum')) store = new Store({ schema });
   console.log('pre inited.');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-export function ipcMains (value: void): any {
-  ipcMain.on('read-file', event => {
+export function ipcMains(value: void): any {
+  ipcMain.on('read-file', (event) => {
     // const fileContent = fs.readFileSync('./file-to-read.txt', { encoding: 'utf-8' })
     const fileContent = 'ddd';
     // Send back an IPC event to the renderer process with the file content.
     event.sender.send('read-file-success', fileContent);
   });
 
+  // ANCHOR Store API
   ipcMain.handle('store-get', (event, key) => {
     // console.log(store.get(key));
     return store.get(key);
@@ -57,14 +58,18 @@ export function ipcMains (value: void): any {
     return 1;
   });
 
+  // ANCHOR Tool API
   ipcMain.handle('tool-traverseFolder', (event, path, pFormats) => {
     console.log(path, pFormats);
     return imageRetrieval(path, pFormats);
   });
 
-  ipcMain.handle('tool-traverseFolder-async', (event, path, pFormats, vFormats,pPageNum) => {
-    return imageRetrievalAsync(path, pFormats, vFormats, pPageNum);
-  });
+  ipcMain.handle(
+    'tool-traverseFolder-async',
+    (event, path, pFormats, vFormats, pPageNum) => {
+      return imageRetrievalAsync(path, pFormats, vFormats, pPageNum);
+    },
+  );
 
   ipcMain.handle('tool-openLink', (event, link) => {
     console.log(link);
@@ -81,5 +86,12 @@ export function ipcMains (value: void): any {
       trash(src);
     }
     console.log('Del: ', src);
+  });
+  ipcMain.handle('tool-selectFolders', async (event) => {
+    console.log('selectFolders');
+    const result = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow()!, {
+      properties: ['openDirectory', 'multiSelections'], // 允许选择多个文件夹
+    });
+    return result.filePaths;
   });
 }

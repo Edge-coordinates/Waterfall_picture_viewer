@@ -1,7 +1,18 @@
 <!-- eslint-disable vue/no-unused-vars -->
 <template>
-  <Wviewer :imgs="list" />
-  <!-- <WviewerViewerjs :imgs="list" /> -->
+  <div v-if="viewerName === 'photoswipe'">
+    <WviewerPhotoswipe :imgs="list" />  
+  </div>
+  <div v-else-if="viewerName === 'biggerpicture'">
+    <WviewerBiggerpicture :imgs="list" />
+  </div>
+  <div v-else-if="viewerName === 'viewerjs'">
+    <WviewerViewerjs :imgs="list" />
+  </div>
+  <div v-else>
+    Please choose a WViewer
+  </div>
+  
   <!-- <WPagination /> -->
   <!-- ANCHOR 页码 -->
   <q-page-sticky position="bottom-left" :offset="[18, 18]">
@@ -21,15 +32,16 @@
 <script setup lang="ts">
 import { NInputNumber } from 'naive-ui'
 import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue'
-import Wviewer from 'components/WaterFall_full.vue'
-// import WviewerViewerjs from 'components/WaterFall_viewerjs.vue'
+import WviewerBiggerpicture from 'src/components/WaterFall_biggerpicture.vue'
+import WviewerViewerjs from 'components/WaterFall_viewerjs.vue'
+import WviewerPhotoswipe from 'components/WaterFall_photoswipe.vue'
 
 // TODO 传入参数有问题，每次更新都会导致查看器UPDATE，这是没有必要的，除非查看器截取部分确实发生了变化（页面内图片更新）
 
 const ifImgPreOK = ref<boolean>(false)
 const props = defineProps({
   fpath: {
-    type: String,
+    type: [Array<string>, String],
     default(rawProps) {
       return []
     }
@@ -42,19 +54,29 @@ const setStore = useSettingStore()
 import { useWViewerStateStore } from 'stores/wViewerState-store';
 const wViewerStateStore = useWViewerStateStore()
 
+import { storeToRefs } from 'pinia'
+const { viewerName } = storeToRefs(setStore)
+
+import cloneDeep from 'lodash/cloneDeep'
+
 const list = ref<any>([])
 
-async function picInfoInit(fpath) {
+async function picInfoInit(fpath: Array<String> | String) {
   console.log('picInfoInit', fpath)
   const pFormat = JSON.parse(JSON.stringify(setStore.getPFormat))
   const vFormat = JSON.parse(JSON.stringify(setStore.getVFormat))
   const perPageNum = JSON.parse(JSON.stringify(setStore.getPerPageNum))
 
   // imgs.value = await window.myToolAPI.traverseFolder(fpath, pFormat)
-
-  window.myToolAPI.traverseFolderAsync(fpath, pFormat, vFormat,perPageNum)
+  if (Array.isArray(fpath) && fpath.length == 1) {
+    fpath = fpath[0]
+  }
+  const theTaskName = Array.isArray(fpath) ? fpath[0] : fpath;
+  const paths = cloneDeep(fpath)
+  window.myToolAPI.traverseFolderAsync(paths, pFormat, vFormat,perPageNum)
   window.myToolAPI.onAsyncImageLinksAppend((event, taskName, paths) => {
-    if (taskName === fpath) {
+    console.log(paths);
+    if (taskName === theTaskName) {
       wViewerStateStore.imgs = paths
       ifImgPreOK.value = true
     }

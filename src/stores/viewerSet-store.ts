@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+// TODO Describe the structure of the store's state and the purpose of this store.
 /**
  * Defines a Pinia store named 'setting'.
  *
@@ -11,7 +12,9 @@ export const useSettingStore = defineStore('setting', {
   state: () => ({
     isOpen: false,
     perPageNum: 20,
-    cycleUpdate: false,
+    // cycleUpdate: false,
+    cycleUpdate: true,
+    viewerName: 'photoswipe',
     imageFormat: [
       '.webp',
       '.jxl',

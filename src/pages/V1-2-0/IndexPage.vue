@@ -46,7 +46,7 @@ import { ref } from 'vue'
 import type { UploadInst } from 'naive-ui'
 
 import WaterFall from 'components/testc/WaterFall.vue'
-import SetComponent from 'components/SetComponent.vue'
+import SetComponent from 'src/components/old-components/SetComponent.vue'
 
 const upload = ref<UploadInst | null>()
 const ifImgPreOK = ref<boolean>(false)
@@ -78,6 +78,9 @@ async function querydb() {
   // })
 }
 
+
+import { normalizePath } from './normalize-path'
+
 async function picInfoInit(fpath) {
   console.log('picInfoInit')
   imgs.value = await window.myToolAPI.traverseFolder(fpath, setStore.imageFormat)
@@ -85,14 +88,28 @@ async function picInfoInit(fpath) {
   ifImgPreOK.value = true
 }
 
+function getFolderPath(fpath, fullfpath) {
+  fpath = normalizePath(fpath)
+  fullfpath = normalizePath(fullfpath)
+  let root = '/' + fpath.split('/')[1] + '/'
+  return fullfpath.replace(fpath, root)
+}
+
+
+// NOTE OLD onUpload Function
+// https://www.naiveui.com/zh-CN/os-theme/components/upload
+// TODO there is a multiple props in the upload component, try to use it
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function onUpload(e: any) {
-  let fpath = e.file.fullPath
-  const fullfpath = e.file.file.path
-  let rt = fpath.split('/')[1]
-  fpath = fullfpath.split(rt)[0] + rt + '\\'
-  // console.log(rt, fpath, fullfpath)
-  console.log(e)
+  console.log('onUpload!');
+  console.log(e);
+  // ! 修改计算逻辑，不用正则了，采用原始字符串匹配？
+  let tmpFpath = e.file.fullPath // 相对路径
+  const fullfpath = e.file.file.path // 绝对路径
+  let fpath // 实际上 fpath 因该是 组件级
+  fpath.value = getFolderPath(tmpFpath, fullfpath)
+  console.log(fpath.value);
 
   picInfoInit(fpath)
 }

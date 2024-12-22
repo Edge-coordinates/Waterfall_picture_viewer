@@ -58,12 +58,28 @@ export function imageRetrieval (thepath, pFormats) {
   return picLinks;
 }
 
-export function imageRetrievalAsync(thepath, pFormats, vFormats, pageSize) {
+// ANCHOR Async Entry
+// * Main Entry
+export function imageRetrievalAsync(thepath: String | Array<any>, pFormats, vFormats, pageSize) {
   if (pFormats) picFormats = pFormats;
   if (vFormats) videoFormats = vFormats;
-  const asyncReadFilePath = new AsyncReadFilePath(thepath, picFormats, videoFormats, pageSize)
+  const taskName = Array.isArray(thepath) ? thepath[0] : thepath;
+  const asyncReadFilePath = new AsyncReadFilePath(taskName, picFormats, videoFormats, pageSize)
   asyncReadFilePath.readDirectory(thepath)
 }
+
+
+function generateRamStr(len, charSet?: string) {
+  const chars = charSet || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomStr = "";
+  for (var i = 0; i < len; i++) {
+    randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return randomStr;
+}
+
+
+
 // // 开始遍历
 // traverseFolder(rootPath);
 

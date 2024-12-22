@@ -54,6 +54,8 @@
                     保存设置
                   </q-tooltip></q-btn>
                 <!-- <div>是否开启图片查看器画廊：<q-toggle disable v-model="simpleSetData.vNavbar" /></div> -->
+                <!-- Viewer Selection -->
+                  <viewer-selection></viewer-selection>
                 <div>
                   <br />
                   <q-list separator>
@@ -71,7 +73,7 @@
               </q-tab-panel>
 
               <q-tab-panel name="alarms">
-                <div class="text-h4 q-mb-md">查看器设置</div>
+                <div class="text-h4 q-mb-md">瀑布流设置</div>
                 <n-dynamic-input v-model:value="WBValue" preset="pair" key-placeholder="环境变量名"
                   value-placeholder="环境变量值" />
                 <q-btn class="float-right" round dense flat icon="mdi-content-save"
@@ -142,6 +144,8 @@ import { NDynamicInput } from 'naive-ui'
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
+
+import ViewerSelection from '../settings/ViewerSelection.vue';
 
 const simpleSetData = reactive({
   perPageNum: null,

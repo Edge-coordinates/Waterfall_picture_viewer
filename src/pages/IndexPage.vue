@@ -6,23 +6,7 @@
     </div>
     <div v-else class="flex justify-center">
       <n-config-provider :locale="zhCN" :date-locale="dateZhCN" class="w-11/12">
-        <!-- <n-upload ref="upload" directory directory-dnd :on-change="onUpload" :max="1" :default-upload="false"
-          :show-file-list="false"> -->
-        <n-upload ref="upload" directory directory-dnd @change="onUpload" @dragover="handleDragOver"
-        @drop="handleDrop" :max="1" :default-upload="false"
-          :show-file-list="false">
-          <n-upload-dragger>
-            <div style="margin-bottom: 12px">
-              <q-icon name="mdi-upload" size="3rem"></q-icon>
-            </div>
-            <n-text style="font-size: 16px">
-              点击或者拖动文件夹到该区域来打开
-            </n-text>
-            <n-p depth="3" style="margin: 8px 0 0 0">
-              目前仅支持文件夹
-            </n-p>
-          </n-upload-dragger>
-        </n-upload>
+          <upload-component :onUpload="onUpload" />
       </n-config-provider>
     </div>
     <div v-if="!ifLoadPath" class="mx-2.5 my-4">
@@ -68,11 +52,11 @@ import type { UploadInst } from 'naive-ui'
 
 import WaterFallLayout from 'layouts/WViewerLayout.vue'
 import SettingsLayout from 'src/layouts/SettingsLayout.vue'
-// import SetComponent from 'components/SetComponent.vue'
+import UploadComponent from 'src/components/UploadComponent.vue'
 
 const ifLoadPath = ref<boolean>(false)
 const upload = ref<UploadInst | null>()
-let fpath = ref<string>('')
+let fpath = ref<string | string[]>('')
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
@@ -84,66 +68,14 @@ function openSetModal() {
   setStore.isOpen = true
 }
 
-function handleDragOver(event: DragEvent) {
-  event.preventDefault();
-}
-
-let selectedFolderPaths = ref<string[]>([]);
-
-function handleDrop(event: DragEvent) {
-  event.preventDefault();
-  console.log(event);
-  const items = event.dataTransfer?.items;
-  if (items) {
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i].webkitGetAsEntry();
-      if (item && item.isDirectory) {
-        console.log(item);
-        // const directoryReader = item.createReader();
-        // directoryReader.readEntries((entries) => {
-        //   for (let j = 0; j < entries.length; j++) {
-        //     if (entries[j].isDirectory) {
-        //       selectedFolderPaths.value.push(entries[j].fullPath);
-        //     }
-        //   }
-        // });
-      }
-    }
-  }
-}
-
 async function querydb() {
+  // TODO document link
   console.log(await window.storeAPI.get('itemNum'))
-  // console.log(await window.storeAPI.set('itemxxxxum', 'hahahahahh'))
-  // console.log(await window.storeAPI.get('itemxxxxum'))
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // window.storeAPI.get('itemNum').then((res: any) => {
-  //   console.log(res)
-  // })
 }
 
-
-import { normalizePath } from './normalize-path'
-
-function getFolderPath(fpath, fullfpath) {
-  fpath = normalizePath(fpath)
-  fullfpath = normalizePath(fullfpath)
-  let root = '/' + fpath.split('/')[1] + '/'
-  return fullfpath.replace(fpath, root)
-}
-
-// https://www.naiveui.com/zh-CN/os-theme/components/upload
-// TODO there is a multiple props in the upload component, try to use it
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function onUpload(e: any) {
+function onUpload(paths: any) {
   console.log('onUpload!');
-  console.log(e);
-  // ! 修改计算逻辑，不用正则了，采用原始字符串匹配？
-  let tmpFpath = e.file.fullPath // 相对路径
-  const fullfpath = e.file.file.path // 绝对路径
-  fpath.value = getFolderPath(tmpFpath, fullfpath)
-  console.log(fpath.value);
-
+  fpath.value = paths
   ifLoadPath.value = true
   // picInfoInit(fpath)
 }

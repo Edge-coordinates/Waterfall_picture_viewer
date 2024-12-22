@@ -3,6 +3,7 @@
 
 export default {
   hello: 'Hello',
+  unOpen: 'This function not yet open',
   failed: 'Action failed',
   success: 'Action was successful'
 };

@@ -51,11 +51,12 @@ export type myWindowAPI = {
 
 export type myToolAPI = {
   traverseFolder: (path: string, pFormats: any) => any;
-  traverseFolderAsync: (path: string, pFormats: string[], vFormats: string[], perPageNum: number) => any;
+  traverseFolderAsync: (path: Array<String>|String, pFormats: string[], vFormats: string[], perPageNum: number) => any;
   openLink: (link: string) => any;
   delPic: (src: string) => any;
   openPath: (src: string) => any;
   showItemInFolder: (src: string) => any;
+  selectFolders: () => any;
   onAsyncImageLinksAppend: (handle: (event: IpcRendererEvent, taskName: string, paths: WImage[]) => void) => void;
 };
 
@@ -84,6 +85,10 @@ const myToolAPIs: myToolAPI = {
   },
   async showItemInFolder (src) {
     shell.showItemInFolder(src);
+  },
+  async selectFolders() {
+    console.log('selectFolders');
+    return await ipcRenderer.invoke('tool-selectFolders');
   },
   onAsyncImageLinksAppend(handle) {
     ipcRenderer.on('async:imageLinks-append', handle);
