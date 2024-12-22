@@ -60,6 +60,8 @@ https://photoswipe.com/data-sources/#custom-html-markup
 ## TODO
 - [ ] 浏览器开发者插件: https://devtools.vuejs.org/guide/standalone
 - [ ] 打包大小分析
+- [ ] 瀑布流：默认开启的定位图片支持
+- [ ] 瀑布流：滚动持续加载支持
 
 - 优化文件夹获取算法
 

@@ -84,6 +84,9 @@ import 'photoswipe/style.css';
 let lightbox: any, thisPic: string;
 let isLightboxOpen = ref(false);
 
+let allPicElement: any;
+let thisPicElement: any;
+
 function handleViewerKeyDown(event) {
   // * 查看器内部 检查是否按下了特定的键，例如 Ctrl + S
   if (event.key === 'Delete') {
@@ -115,14 +118,28 @@ function handleViewerKeyDown(event) {
   // 可以添加其他条件检查
 }
 
+// Determine if an element is in the window
+function isElementPartiallyInWindow(element) {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom > 0 &&
+    rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
+    rect.right > 0
+  );
+}
+
 // 首次加载
 onMounted(() => {
+  allPicElement = document.querySelectorAll('img');
+
   if (!lightbox) {
     lightbox = new PhotoSwipeLightbox({
       gallery: '#pic-wrapper',
       children: 'a',
       pswpModule: () => import('photoswipe'),
     });
+    // Viewer features expand | UI
     lightbox.on('uiRegister', function () {
       lightbox.pswp.ui.registerElement({
         name: 'folder-button',
@@ -165,10 +182,11 @@ onMounted(() => {
     lightbox.on('contentActivate', ({ content }) => {
       console.log('contentActivate', content.data.src);
       thisPic = content.data.src;
+      thisPicElement = Array.from(allPicElement).find((img: any) => img.src.includes(thisPic));
     });
 
     lightbox.on('openingAnimationStart', () => {
-      // 开始监听 查看器内 快捷键
+      // Start listening the viewer Shortcut Inside 
       document.addEventListener('keydown', handleViewerKeyDown);
       isLightboxOpen.value = true;
       wViewerStateStore.ifViewerOpen = true;
@@ -180,6 +198,9 @@ onMounted(() => {
       isLightboxOpen.value = false;
       wViewerStateStore.ifViewerOpen = false;
       console.log('closingAnimationStart');
+      if(thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
+        thisPicElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
 
     lightbox.init();
