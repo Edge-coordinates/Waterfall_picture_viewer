@@ -89,6 +89,9 @@ const props = defineProps({
   },
 });
 
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 // ANCHOR - Viewer Initialization
 import BiggerPicture from 'bigger-picture';
 // import style
@@ -133,7 +136,7 @@ function handleViewerKeyDown(event) {
     // pswpImgSrc = decodeURIComponent(pswpImgSrc)
     let pswpImgSrc = decodeURIComponent(thisPic).replace(/atom:\/\//g, '');
     console.log(pswpImgSrc);
-    if (confirm('确定要删除图片嘛？')) {
+    if (confirm(t('deleteConfirmation'))) {
       window.myToolAPI.delPic(pswpImgSrc);
       // console.log(getFolder(pswpImgSrc, /atom:\/\//g))
       // Delete images in the waterfall!

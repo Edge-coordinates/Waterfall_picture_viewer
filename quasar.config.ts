@@ -143,7 +143,7 @@ export default configure((ctx) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {notify: /* look at QuasarConfOptions from the API card */{}},
 
       iconSet: 'mdi-v7', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -156,7 +156,9 @@ export default configure((ctx) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: [
+        'Notify',
+      ],
     },
 
     // animations: 'all', // --- includes all animations
@@ -246,7 +248,8 @@ export default configure((ctx) => {
       builder: {
         // https://www.electron.build/configuration/configuration
         appId: 'waterfall-picture-viewer',
-        productName: 'Waterfall Picture Viewer',
+        // productName: 'Waterfall Picture Viewer',
+        productName: 'WViewer',
         directories: {
           output: 'dist',
           buildResources: 'buildResources',
@@ -277,7 +280,8 @@ export default configure((ctx) => {
           installerHeaderIcon: './public/icons/icon.ico', // 安装时头部图标
           createDesktopShortcut: true, // 创建桌面图标
           createStartMenuShortcut: true, // 创建开始菜单图标
-          shortcutName: 'Waterfall Picture Viewer', // 图标名称
+          shortcutName: 'WViewer', // 图标名称
+          // shortcutName: 'Waterfall Picture Viewer', // 图标名称
         },
       },
     },

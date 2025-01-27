@@ -28,6 +28,8 @@
               <q-tab-panel name="mails">
                 <!-- ANCHOR 基础设置 -->
                 <div class="text-h4 q-mb-md">基础设置</div>
+                <!-- language choose -->
+                <LanguageChoose :save-data="saveData"></LanguageChoose>
                 <q-input v-model="simpleSetData.perPageNum" :label="'每页展示图片数目 当前:' + setStore.perPageNum + '/页'">
                   <template v-slot:after>
                     <q-btn round dense flat icon="mdi-content-save" @click="saveData('perPageNum')"><q-tooltip
@@ -54,8 +56,7 @@
                     保存设置
                   </q-tooltip></q-btn>
                 <!-- <div>是否开启图片查看器画廊：<q-toggle disable v-model="simpleSetData.vNavbar" /></div> -->
-                <!-- Viewer Selection -->
-                <viewer-selection :save-data="saveData"></viewer-selection>
+                
                 <div>
                   <br />
                   <q-list separator>
@@ -74,6 +75,9 @@
 
               <q-tab-panel name="alarms">
                 <div class="text-h4 q-mb-md">查看器设置</div>
+                <!-- Viewer Selection -->
+                <viewer-selection :save-data="saveData"></viewer-selection>
+                <h3 class="text-xl font-semibold">瀑布流设置</h3>
                 <n-dynamic-input v-model:value="WBValue" preset="pair" key-placeholder="环境变量名"
                   value-placeholder="环境变量值" />
                 <q-btn class="float-right" round dense flat icon="mdi-content-save"
@@ -138,6 +142,10 @@
 
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
+
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 let text, dense
 import { ref, reactive, onMounted } from 'vue'
 import { NDynamicInput } from 'naive-ui'
@@ -146,6 +154,7 @@ import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
 
 import ViewerSelection from 'components/settings/ViewerSelection.vue';
+import LanguageChoose from 'src/components/settings/LanguageChoose.vue';
 
 const simpleSetData = reactive({
   perPageNum: null,
@@ -188,6 +197,8 @@ function updateStore() {
 }
 
 // ANCHOR Save Data
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 function saveData(id) {
   console.log('saved!', id)
   switch (id) {
@@ -205,7 +216,11 @@ function saveData(id) {
     case 'viewerName':
       window.storeAPI.set('viewerName', setStore.viewerName)
       break
+    case 'language':
+      window.storeAPI.set('language', setStore.language.value)
+      break
   }
+  $q.notify({ color: 'teal', message: t('saveSuccess'), icon: 'tag_faces', position: 'top-right'})
 }
 
 onMounted(() => {

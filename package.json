@@ -3,7 +3,7 @@
   "version": "1.3.0",
   "versionKeys": "",
   "description": "A simple picture viewer",
-  "productName": "W Viewer",
+  "productName": "WViewer",
   "author": "边缘坐标 <Edgecoordinates@gmail.com>",
   "private": true,
   "type": "module",

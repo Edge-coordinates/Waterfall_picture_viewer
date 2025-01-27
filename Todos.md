@@ -5,6 +5,7 @@
 - [规范化](#规范化)
 - [自定义灯箱](#自定义灯箱)
 - [TODO](#todo)
+- [Note](#note)
 - [布局](#布局)
 
 ## Part1
@@ -58,10 +59,16 @@ https://photoswipe.com/data-sources/#custom-html-markup
 - 把 setting 也放到 Layout 里面
 
 ## TODO
+- [ ] 更改软件名称为 WViewer
+- [ ] 滚动到页面底部自动识别继续滚动的话加载下一页，包括动画效果
+- [ ] 已经加载了文件夹的前提下，能不能再直接拖动别的文件夹进软件边框范围内重新加载新的文件夹
+- [ ] 添加到右键目录菜单
+- [ ] 找一个本地数据库调试工具
 - [ ] 浏览器开发者插件: https://devtools.vuejs.org/guide/standalone
 - [ ] 打包大小分析
 - [ ] 瀑布流：默认开启的定位图片支持
 - [ ] 瀑布流：滚动持续加载支持
+- [ ] This PIC is not good, use ThisPicIndex instead
 
 - 优化文件夹获取算法
 
@@ -101,6 +108,9 @@ bp.open({
 
 https://github.com/lokesh/lightbox2
 
+
+## Note
+窗口名称 依据 package.json productName
 
 ## 布局
 ├── components/          # 通用组件

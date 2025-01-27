@@ -52,7 +52,7 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { NInputNumber } from 'naive-ui';
-import { onMounted, onUnmounted, reactive, ref, computed, watch } from 'vue';
+import { onMounted, onUnmounted, onUpdated, reactive, ref, computed, watch } from 'vue';
 import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next';
 // import WPagination from './WPagination.vue'
 // 重新处理
@@ -71,6 +71,14 @@ const props = defineProps({
       return [];
     },
   },
+  nextPage: {
+    type: Function,
+    default: () => {},
+  },
+  prePage: {
+    type: Function,
+    default: () => {},
+  },
 });
 // import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 // import 'vue-waterfall-plugin-next/dist/style.css'
@@ -81,14 +89,19 @@ import error from 'assets/error.png';
 // ANCHOR 查看器初始化
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
+import { list } from 'postcss';
+import { storeToRefs } from 'pinia';
 let lightbox: any, thisPic: string;
 let isLightboxOpen = ref(false);
 
 let allPicElement: any;
 let thisPicElement: any;
+const { thisPicDecode, ifOpenFirstPic } = storeToRefs(wViewerStateStore);
 
+// ANCHOR shortcut key
 function handleViewerKeyDown(event) {
-  // * 查看器内部 检查是否按下了特定的键，例如 Ctrl + S
+  // * Viewer internal Checks if a specific key was pressed, e.g. Ctrl + S
+  // ! NOLY internal
   if (event.key === 'Delete') {
     event.preventDefault(); // 阻止默认行为（例如保存网页）
     console.log('pressed Delete.');
@@ -115,7 +128,18 @@ function handleViewerKeyDown(event) {
       // handleLoadMore()
     }
   }
-  // 可以添加其他条件检查
+  if (event.key == 'ArrowRight') {
+    if (decodeURIComponent(thisPic) == props.imgs[props.imgs.length - 1].src) {
+      props.nextPage();
+      ifOpenFirstPic.value = true;
+      lightbox.pswp.destroy();
+    }
+  }
+  if (event.key == 'ArrowLeft') {
+    if (decodeURIComponent(thisPic) == props.imgs[0].src) {
+      // props.prePage();
+    }
+  }
 }
 
 // Determine if an element is in the window
@@ -129,10 +153,19 @@ function isElementPartiallyInWindow(element) {
   );
 }
 
+onUpdated(() => {
+  console.log('onUpdated');
+    
+  if(ifOpenFirstPic.value && lightbox) {
+    console.log('ifOpenFirstPic.value:', ifOpenFirstPic.value);
+    lightbox.loadAndOpen(0); 
+    ifOpenFirstPic.value = false;
+  }
+});
+
 // 首次加载
 onMounted(() => {
   allPicElement = document.querySelectorAll('img');
-
   if (!lightbox) {
     lightbox = new PhotoSwipeLightbox({
       gallery: '#pic-wrapper',
@@ -182,6 +215,7 @@ onMounted(() => {
     lightbox.on('contentActivate', ({ content }) => {
       console.log('contentActivate', content.data.src);
       thisPic = content.data.src;
+      thisPicDecode.value = decodeURIComponent(thisPic);
       thisPicElement = Array.from(allPicElement).find((img: any) => img.src.includes(thisPic));
     });
 

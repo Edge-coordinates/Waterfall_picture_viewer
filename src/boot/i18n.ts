@@ -22,8 +22,9 @@ declare module 'vue-i18n' {
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
 export default boot(({ app }) => {
+  // create default i18n instance with en-US locale
   const i18n = createI18n({
-    locale: 'zh-CN',
+    locale: 'en-US',
     legacy: false,
     messages,
   });

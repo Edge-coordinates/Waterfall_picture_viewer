@@ -11,10 +11,11 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/test/',
-    component: () => import('layouts/TestLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('src/pages/V1-2-0/IndexPage.vue') },
-      { path: 'a/', component: () => import('src/pages/V1-2-0/APage.vue') }
+      { path: '', component: () => import('src/pages/test/IndexPage.vue') },
+      { path: 'a/', component: () => import('src/pages/test/APage.vue') },
+      { path: 'initLanguage/', component: () => import('src/pages/test/initLanguage.vue') }
     ]
   },
   // Always leave this as last one,

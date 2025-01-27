@@ -1,55 +1,51 @@
-# WViewer 瀑布流图片查看器
+# WViewer: Waterfall-Style Image Viewer
 
 ![doc_home.png](./docs/doc_home.png)
 
-**瀑布流**图片查看器，可以遍历文件夹和所有子文件夹并读取其中的全部图片，对于每个文件夹下的图片**按照名称排序**展示。
-如果图片过多，会按照 定制数量（默认40张图片）/一页进行拆分，支持页面跳转，翻页。
+A **waterfall-style** image viewer that traverses a folder and all its subfolders to read and display all images. Images within each folder are shown **sorted by name**.  
+If there are too many images, the software splits them into pages based on a configurable number of images per page (default: 40). It supports page navigation and flipping.
 
-## 适用范围
+## Suitable Use Cases
 <details>
 
-当看画师图包的时候，很有可能会碰到这种情况：
-![样例](./docs/1.png)
+When browsing an artist's image pack, you might encounter situations like this:  
+![Example](./docs/1.png)
 
-- 非常多的子文件夹，每个子文件夹中图片又不是很多。图片看起来，很不能尽兴。
-- 同时，文件浏览器哪怕是**超大图标**，浏览起来仍然让人不很舒服。
-- 想要放大查看某张图片，需要调用图片查看器程序，比较麻烦。
-- 使用第三方查看软件，需要复制建库，持续添加…… 但是我只是想浏览一下这个文件夹的图片啊？
+- Many subfolders, each containing only a few images, making it hard to browse them enjoyably.
+- Even with **extra-large icons** in file explorer, browsing can feel cumbersome.
+- To enlarge and view a specific image, you must open a separate image viewer, which can be inconvenient.
+- Third-party viewers often require library setup, continuous additions, etc., but sometimes you just want to browse a folder's images quickly!
 
-**于是，本软件诞生以解决您的所有需求！！！**
+**That's why this software was created—to solve all your needs!!!**
 
-具体请查看[使用示例](#使用示例)
+For details, see [Usage Examples](#usage-examples).
 
 </details>
 
-## 特性
-- 💡 **展示所有**：递归遍历展示选择文件夹**及其所有子文件夹**中的图片，并按照名称排序展示。
-- 🔑 **方便**： 直接拖入一个文件夹，即可查看图片，**0配置，0副作用**！！！
-- ⚡ **快捷**： 可配置每一页展示的图片数量，以避免图片加载卡顿。
-- 🦋 **瀑布流**：美观，大方
-- ⌨️ **快捷键支持**：~~翻页快捷键~~，翻图片快捷键（均为 左右键）支持。
-- 🛠️ **实用的图片查看器**：([photoswipe](https://github.com/dimsemenov/photoswipe))支持 图片查看的常规操作，放大，旋转，同样支持浏览上一张，下一张图片。
-- 🖥️ **可设置**：支持定制 每页显示图片数量（当硬盘一般且单张图片过大时，建议选择较少的数量，10~20张比较不错），可设置图片筛选器（选定图片类型）……
+## Features
+- 💡 **Show Everything**: Recursively traverse the selected folder **and all its subfolders**, displaying images sorted by name.
+- 🔑 **Convenience**: Simply drag a folder into the program to view its images—**zero configuration, zero side effects**!!!
+- ⚡ **Speed**: Configurable images per page to avoid lag during image loading.
+- 🦋 **Waterfall Layout**: Aesthetic and elegant.
+- ⌨️ **Keyboard Shortcuts**: ~~Page navigation shortcuts~~ and image navigation shortcuts (Left/Right keys supported).
+- 🛠️ **Practical Image Viewer**: ([photoswipe](https://github.com/dimsemenov/photoswipe)) Supports standard image viewer operations like zooming, rotating, and browsing previous/next images.
+- 🖥️ **Customizable Settings**: Configurable number of images per page (if your hard drive is slow or individual images are large, a smaller number like 10–20 is recommended). Includes a filter for selecting specific image types.
 
-## 警告
+## Warnings
+- Loading a large number of images may cause lag due to slow hard drive read speeds—please be patient.
+- If the images are large and your hard drive performs poorly, browsing may be sluggish. In such cases, consider using an SSD or reducing the number of images displayed per page.
 
-- 加载大量图片时可能会软件卡顿，这是电脑硬盘读取过慢造成的，耐心等待即可。
-- 如果图片过大，硬盘性能不好，可能会造成加载浏览卡顿，这时候，建议使用固态硬盘，或者调小每一页展示的图片数量！！
-
-## 使用示例
-- **[YouTube](https://www.youtube.com/watch?v=MHicKz_QJ1w)**
-- **[Telegram](https://t.me/edge_wasteland/6526)**
-- **[哔哩哔哩](https://www.bilibili.com/video/BV1tm411Q7Js/)**
+## Usage Examples
+- **[YouTube](https://www.youtube.com/watch?v=MHicKz_QJ1w)**  
+- **[Telegram](https://t.me/edge_wasteland/6526)**  
+- **[Bilibili](https://www.bilibili.com/video/BV1tm411Q7Js/)**  
 <!-- **[GIF preview link](https://postimg.cc/ctZfPV1q)** -->
 
-### For NSFW Use
-**[TG preview link](https://t.me/edge_wasteland/6465)**
+### For NSFW Use  
+**[TG Preview Link](https://t.me/edge_wasteland/6465)**
 
-## 致歉
+## Apologies
+Due to time constraints (~~final year of high school~~) and limited personal skills (~~just a noob~~), the software may have several issues and suboptimal performance. Please be understanding and feel free to contribute code improvements!
 
-因为本人时间原因（~~高三~~），个人能力有限（~~是个废物~~）。软件可能存在诸多问题，优化上也很烂，请诸位多多包涵，也欢迎大佬贡献代码。
-
-## 最后
-
-希望大家赏个**Star**，以满足吾辈这小小的虚荣心吧！！！
-
+## Finally
+If you like this project, please consider giving it a **Star**—it would satisfy my tiny bit of vanity!!! 😊

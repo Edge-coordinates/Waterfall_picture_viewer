@@ -23,6 +23,10 @@ async function initData() {
   // console.log(await window.storeAPI.get('WBreakpoint'), setStore.waterfallBreakpoint)
   if (tmpdata = await window.storeAPI.get('cycleUpdate')) setStore.cycleUpdate = tmpdata
   if (tmpdata = await window.storeAPI.get('viewerName')) setStore.viewerName = tmpdata
+  if (tmpdata = await window.storeAPI.get('language')) {
+    setStore.language.value = tmpdata
+    setStore.language.label = setStore.languages.find((item) => item.value === tmpdata)!.label
+  }
   console.log('APP setData inited!')
 }
 

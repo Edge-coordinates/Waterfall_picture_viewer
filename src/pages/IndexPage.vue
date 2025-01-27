@@ -40,6 +40,7 @@
     </q-page-sticky>
   </q-page>
   <settings-layout />
+  <init-language />
 </template>
 
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
@@ -49,6 +50,8 @@ import { zhCN, dateZhCN } from 'naive-ui'
 
 import { ref } from 'vue'
 import type { UploadInst } from 'naive-ui'
+
+import initLanguage from 'components/settings/initLanguage.vue'
 
 import WaterFallLayout from 'layouts/WViewerLayout.vue'
 import SettingsLayout from 'src/layouts/SettingsLayout.vue'
@@ -60,6 +63,8 @@ let fpath = ref<string | string[]>('')
 
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore()
+import { useWViewerStateStore } from 'stores/wViewerState-store';
+const wViewerStateStore = useWViewerStateStore();
 
 
 function openSetModal() {
@@ -83,6 +88,7 @@ function onUpload(paths: any) {
 function stateInitialization() {
   upload.value?.clear()
   ifLoadPath.value = false
+  wViewerStateStore.$reset()
   // The logic for modifying the Imgs array should be moved to the Layout file
   // use watch function
 }

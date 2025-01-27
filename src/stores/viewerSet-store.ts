@@ -10,6 +10,20 @@ import { defineStore } from 'pinia';
  */
 export const useSettingStore = defineStore('setting', {
   state: () => ({
+    language: {
+      label: '',
+      value: '',
+    },
+    languages: [
+      {
+        label: 'English',
+        value: 'en-US',
+      },
+      {
+        label: '简体中文',
+        value: 'zh-CN',
+      },
+    ],
     isOpen: false,
     perPageNum: 20,
     // cycleUpdate: false,
