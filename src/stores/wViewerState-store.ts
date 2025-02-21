@@ -13,7 +13,7 @@ export const useWViewerStateStore = defineStore('wViewerState', {
   state: () => ({
     ifViewerOpen: false,
     thisPicDecode: '',
-    ifOpenFirstPic: false,
+    openPicNum: -1,
     imgs: [] as WImage[],
   }),
   // getters: {

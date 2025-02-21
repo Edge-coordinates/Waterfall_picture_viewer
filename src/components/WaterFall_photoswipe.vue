@@ -52,7 +52,17 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { NInputNumber } from 'naive-ui';
-import { onMounted, onUnmounted, onUpdated, reactive, ref, computed, watch } from 'vue';
+import {
+  onMounted,
+  onBeforeUnmount,
+  onUnmounted,
+  onUpdated,
+  reactive,
+  ref,
+  computed,
+  watch,
+  onRenderTriggered 
+} from 'vue';
 import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next';
 // import WPagination from './WPagination.vue'
 // 重新处理
@@ -96,7 +106,7 @@ let isLightboxOpen = ref(false);
 
 let allPicElement: any;
 let thisPicElement: any;
-const { thisPicDecode, ifOpenFirstPic } = storeToRefs(wViewerStateStore);
+const { thisPicDecode, openPicNum } = storeToRefs(wViewerStateStore);
 
 // ANCHOR shortcut key
 function handleViewerKeyDown(event) {
@@ -129,10 +139,16 @@ function handleViewerKeyDown(event) {
     }
   }
   if (event.key == 'ArrowRight') {
+    
+    console.log(lightbox.pswp);
     if (decodeURIComponent(thisPic) == props.imgs[props.imgs.length - 1].src) {
       props.nextPage();
-      ifOpenFirstPic.value = true;
-      lightbox.pswp.destroy();
+      lightbox.pswp.refreshSlideContent(0);
+      lightbox.pswp.goTo(3);
+    //   openPicNum.value = 0;
+    //   console.log(lightbox.pswp);
+    //   // lightbox.pswp.destroy();
+    //   lightbox.pswp.close();
     }
   }
   if (event.key == 'ArrowLeft') {
@@ -153,13 +169,20 @@ function isElementPartiallyInWindow(element) {
   );
 }
 
+onRenderTriggered((event) => {
+  console.log("触发渲染的原因：", event);
+  console.log(import.meta.env.MODE)
+});
+
 onUpdated(() => {
   console.log('onUpdated');
-    
-  if(ifOpenFirstPic.value && lightbox) {
-    console.log('ifOpenFirstPic.value:', ifOpenFirstPic.value);
-    lightbox.loadAndOpen(0); 
-    ifOpenFirstPic.value = false;
+  // lightbox.loadAndOpen(0);
+  if (openPicNum.value != -1 && lightbox) {
+    console.log('openPicNum.value:', openPicNum.value);
+    lightbox.loadAndOpen(0, {gallery: '#pic-wrapper',
+    children: 'a'});
+    console.log(lightbox);
+    openPicNum.value = -1;
   }
 });
 
@@ -216,11 +239,13 @@ onMounted(() => {
       console.log('contentActivate', content.data.src);
       thisPic = content.data.src;
       thisPicDecode.value = decodeURIComponent(thisPic);
-      thisPicElement = Array.from(allPicElement).find((img: any) => img.src.includes(thisPic));
+      thisPicElement = Array.from(allPicElement).find((img: any) =>
+        img.src.includes(thisPic),
+      );
     });
 
     lightbox.on('openingAnimationStart', () => {
-      // Start listening the viewer Shortcut Inside 
+      // Start listening the viewer Shortcut Inside
       document.addEventListener('keydown', handleViewerKeyDown);
       isLightboxOpen.value = true;
       wViewerStateStore.ifViewerOpen = true;
@@ -232,7 +257,7 @@ onMounted(() => {
       isLightboxOpen.value = false;
       wViewerStateStore.ifViewerOpen = false;
       console.log('closingAnimationStart');
-      if(thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
+      if (thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
         thisPicElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
@@ -241,7 +266,7 @@ onMounted(() => {
   }
 });
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
   if (lightbox) {
     lightbox.destroy();
     lightbox = null;
