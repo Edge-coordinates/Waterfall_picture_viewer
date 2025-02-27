@@ -14,7 +14,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>photoswipe</q-item-label>
-          <q-item-label caption>Default </q-item-label>
+          <q-item-label caption>Default, Full Functions!</q-item-label>
         </q-item-section>
       </q-item>
 

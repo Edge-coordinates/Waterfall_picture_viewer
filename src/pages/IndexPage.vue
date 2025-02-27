@@ -35,7 +35,17 @@
             >键来删除当前正在浏览的图片！（会删除到回收站，不保证稳定！）
           </p>
         </q-item>
-
+        <q-item clickable v-ripple>
+          <i class="fa-sharp fa-regular fa-xmark text-base"></i>
+          <p>&nbsp;&nbsp;按时间排序不完全支持多选文件夹，大部分需要重启的功能，或者BUG都可以用
+            <kbd class="kbd kbd-sm bg-white">Ctrl</kbd> +
+            <kbd class="kbd kbd-sm bg-white">R</kbd>解决
+          </p>
+        </q-item>
+        <q-item clickable v-ripple>
+          <i class="fa-sharp fa-regular fa-raygun text-base"></i>
+          <p>&nbsp;&nbsp;因为不想写文档所以请您自行研究设置看看有哪些功能</p>
+        </q-item>
         <q-item clickable v-ripple>
           <i class="fa-sharp fa-regular fa-house-chimney-heart text-base"></i>
           <p>&nbsp;&nbsp;祝您使用愉快！ {{ $t('hello') }}</p>

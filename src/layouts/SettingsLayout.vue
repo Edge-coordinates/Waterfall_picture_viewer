@@ -152,7 +152,7 @@
                 <q-select
                   v-model="setStore.sortMethod"
                   :options="setStore.sortMethodOptions"
-                  label="Standard"
+                  label="排序方式"
                 >
                   <template v-slot:after>
                     <q-btn
