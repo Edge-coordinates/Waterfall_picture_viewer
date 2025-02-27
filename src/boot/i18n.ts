@@ -29,6 +29,14 @@ export default boot(({ app }) => {
     messages,
   });
 
+  // 禁用 警告
+  app.config.warnHandler = (msg, vm, trace) => {
+    if (msg.includes("Invalid prop: type check failed")) {
+      return; // 直接跳过这个警告，不输出
+    }
+    console.warn(msg, trace); // 其他警告仍然打印
+  };
+  
   // Set i18n instance on app
   app.use(i18n);
 });

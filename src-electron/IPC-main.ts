@@ -66,8 +66,8 @@ export function ipcMains(value: void): any {
 
   ipcMain.handle(
     'tool-traverseFolder-async',
-    (event, path, pFormats, vFormats, pPageNum) => {
-      return imageRetrievalAsync(path, pFormats, vFormats, pPageNum);
+    (event, path, pFormats, vFormats, pPageNum, sortMethod) => {
+      return imageRetrievalAsync(path, pFormats, vFormats, pPageNum, sortMethod);
     },
   );
 

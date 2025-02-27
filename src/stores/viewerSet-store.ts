@@ -29,6 +29,15 @@ export const useSettingStore = defineStore('setting', {
     // cycleUpdate: false,
     cycleUpdate: true,
     viewerName: 'photoswipe',
+    singlePageLoop: false,
+    globalDropFolderOpen: true,
+    sortMethod: 'name-asc',
+    sortMethodOptions: [
+      'name-asc',
+      'name-desc',
+      'time-asc',
+      'time-desc',
+    ],
     imageFormat: [
       '.webp',
       '.jxl',

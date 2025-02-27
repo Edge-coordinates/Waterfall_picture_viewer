@@ -60,11 +60,11 @@ export function imageRetrieval (thepath, pFormats) {
 
 // ANCHOR Async Entry
 // * Main Entry
-export function imageRetrievalAsync(thepath: String | Array<any>, pFormats, vFormats, pageSize) {
+export function imageRetrievalAsync(thepath: String | Array<any>, pFormats, vFormats, pageSize, sortMethod) {
   if (pFormats) picFormats = pFormats;
   if (vFormats) videoFormats = vFormats;
   const taskName = Array.isArray(thepath) ? thepath[0] : thepath;
-  const asyncReadFilePath = new AsyncReadFilePath(taskName, picFormats, videoFormats, pageSize)
+  const asyncReadFilePath = new AsyncReadFilePath(taskName, picFormats, videoFormats, pageSize, sortMethod);
   asyncReadFilePath.readDirectory(thepath)
 }
 

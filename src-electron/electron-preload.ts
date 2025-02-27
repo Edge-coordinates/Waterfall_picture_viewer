@@ -51,7 +51,7 @@ export type myWindowAPI = {
 
 export type myToolAPI = {
   traverseFolder: (path: string, pFormats: any) => any;
-  traverseFolderAsync: (path: Array<String>|String, pFormats: string[], vFormats: string[], perPageNum: number) => any;
+  traverseFolderAsync: (path: Array<String>|String, pFormats: string[], vFormats: string[], perPageNum: number, sortMethod: string) => any;
   openLink: (link: string) => any;
   delPic: (src: string) => any;
   openPath: (src: string) => any;
@@ -71,8 +71,8 @@ const myToolAPIs: myToolAPI = {
   async traverseFolder (path, pFormats) {
     return await ipcRenderer.invoke('tool-traverseFolder', path, pFormats);
   },
-  async traverseFolderAsync (path, pFormats, vFormats, perPageNum) {
-    return await ipcRenderer.invoke('tool-traverseFolder-async', path, pFormats, vFormats,perPageNum);
+  async traverseFolderAsync (path, pFormats, vFormats, perPageNum, sortMethod) {
+    return await ipcRenderer.invoke('tool-traverseFolder-async', path, pFormats, vFormats,perPageNum, sortMethod);
   },
   async openLink (link) {
     return await ipcRenderer.invoke('tool-openLink', link);

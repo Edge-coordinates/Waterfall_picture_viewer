@@ -1,5 +1,8 @@
 <template>
   <div id="pic-wrapper" class="page-b-content">
+    <div id="pic-wapper-page" style="display: none" :data-page="page">
+      {{ page }}
+    </div>
     <Waterfall
       :list="imgs"
       :row-key="options.rowKey"
@@ -17,12 +20,14 @@
           class="bg-gray-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-lg hover:shadow-gray-600 group"
         >
           <a
-            :key="url"
+            :key="item.key"
             :href="url"
+            :data-key="item.key"
             :data-pswp-width="item.width"
             :data-pswp-height="item.height"
             :data-source="item.source"
             class="overflow-hidden"
+            @click="openImgID(item.key, $event)"
           >
             <!-- <a :key="url" :href="url"
           :data-source="item.source" class="overflow-hidden"> -->
@@ -60,8 +65,9 @@ import {
   reactive,
   ref,
   computed,
+  nextTick,
   watch,
-  onRenderTriggered 
+  onRenderTriggered,
 } from 'vue';
 import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next';
 // import WPagination from './WPagination.vue'
@@ -69,12 +75,18 @@ import { Waterfall, LazyImg } from 'vue-waterfall-plugin-next';
 // import type { ViewCard } from './waterfall'
 import 'vue-waterfall-plugin-next/dist/style.css';
 
+import _ from 'lodash';
+
 import { useSettingStore } from 'stores/viewerSet-store';
 const setStore = useSettingStore();
 import { useWViewerStateStore } from 'stores/wViewerState-store';
 const wViewerStateStore = useWViewerStateStore();
 
 const props = defineProps({
+  page: {
+    type: Number,
+    default: 1,
+  },
   imgs: {
     type: Array<any>,
     default(rawProps) {
@@ -106,7 +118,8 @@ let isLightboxOpen = ref(false);
 
 let allPicElement: any;
 let thisPicElement: any;
-const { thisPicDecode, openPicNum } = storeToRefs(wViewerStateStore);
+const { thisPicDecode, openPicNum, lastPageTunningCommand } =
+  storeToRefs(wViewerStateStore);
 
 // ANCHOR shortcut key
 function handleViewerKeyDown(event) {
@@ -138,24 +151,56 @@ function handleViewerKeyDown(event) {
       // handleLoadMore()
     }
   }
-  if (event.key == 'ArrowRight') {
-    
-    console.log(lightbox.pswp);
+  if (!setStore.singlePageLoop && event.key == 'ArrowRight') {
+    // console.log(lightbox.pswp);
     if (decodeURIComponent(thisPic) == props.imgs[props.imgs.length - 1].src) {
       props.nextPage();
-      lightbox.pswp.refreshSlideContent(0);
-      lightbox.pswp.goTo(3);
-    //   openPicNum.value = 0;
-    //   console.log(lightbox.pswp);
-    //   // lightbox.pswp.destroy();
-    //   lightbox.pswp.close();
+      lastPageTunningCommand.value = 'ArrowRight';
     }
   }
-  if (event.key == 'ArrowLeft') {
+  if (!setStore.singlePageLoop && event.key == 'ArrowLeft') {
     if (decodeURIComponent(thisPic) == props.imgs[0].src) {
-      // props.prePage();
+      props.prePage();
+      lastPageTunningCommand.value = 'ArrowLeft';
     }
   }
+}
+
+function pageChageObserver() {
+  watch(
+    () => props.imgs,
+    async (newValue, oldValue) => {
+      // console.log('props 变更:', oldValue, '→', newValue);
+      let imgChage = 0;
+      for (let i = 0; i < oldValue.length; i++) {
+        if (!newValue.find((item) => item.source === oldValue[i].source)) {
+          // console.log('图片变更:', oldValue[i], '→', newValue[i]);
+          imgChage = 1;
+          break;
+        }
+      }
+      if (imgChage && _.has(lightbox, 'pswp.options.dataSource')) {
+        await nextTick(); // Wait for DOM update
+        console.log('图片变更:', oldValue, '→', newValue);
+        lightbox.pswp.options.dataSource = props.imgs;
+        console.log(lightbox.pswp.options.dataSource, props.imgs);
+        if (lastPageTunningCommand.value == 'ArrowRight') {
+          thisPic = newValue[0].src;
+          lightbox.pswp.refreshSlideContent(0);
+          lightbox.pswp.refreshSlideContent(1);
+          lightbox.pswp.goTo(newValue.length - 1);
+          lightbox.pswp.refreshSlideContent(0);
+        } else if (lastPageTunningCommand.value == 'ArrowLeft') {
+          thisPic = newValue[newValue.length - 1].src;
+          lightbox.pswp.refreshSlideContent(newValue.length - 1);
+          lightbox.pswp.refreshSlideContent(newValue.length - 2);
+          lightbox.pswp.goTo(0);
+          lightbox.pswp.refreshSlideContent(newValue.length - 1);
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        }
+      }
+    },
+  );
 }
 
 // Determine if an element is in the window
@@ -170,27 +215,34 @@ function isElementPartiallyInWindow(element) {
 }
 
 onRenderTriggered((event) => {
-  console.log("触发渲染的原因：", event);
-  console.log(import.meta.env.MODE)
+  console.log('触发渲染的原因：', event);
+  console.log(import.meta.env.MODE);
 });
 
 onUpdated(() => {
   console.log('onUpdated');
   // lightbox.loadAndOpen(0);
   if (openPicNum.value != -1 && lightbox) {
-    console.log('openPicNum.value:', openPicNum.value);
-    lightbox.loadAndOpen(0, {gallery: '#pic-wrapper',
-    children: 'a'});
-    console.log(lightbox);
+    // console.log('openPicNum.value:', openPicNum.value);
+    // lightbox.loadAndOpen(0, { gallery: '#pic-wrapper', children: 'a' });
+    // console.log(lightbox);
     openPicNum.value = -1;
   }
 });
 
-// 首次加载
-onMounted(() => {
-  allPicElement = document.querySelectorAll('img');
-  if (!lightbox) {
+function openImgID(imgKey, event) {
+  event.preventDefault();
+  // console.log('openimgID', imgKey, event);
+  if (lightbox) {
+    console.log(lightbox);
+    lightbox.loadAndOpen(imgKey);
+  }
+}
+
+function initLightBox() {
+  if (!lightbox || !lightbox.hasOwnProperty('pswp')) {
     lightbox = new PhotoSwipeLightbox({
+      // dataSource:props.imgs,
       gallery: '#pic-wrapper',
       children: 'a',
       pswpModule: () => import('photoswipe'),
@@ -236,12 +288,9 @@ onMounted(() => {
     });
 
     lightbox.on('contentActivate', ({ content }) => {
-      console.log('contentActivate', content.data.src);
+      // console.log('contentActivate', content.data.src);
       thisPic = content.data.src;
       thisPicDecode.value = decodeURIComponent(thisPic);
-      thisPicElement = Array.from(allPicElement).find((img: any) =>
-        img.src.includes(thisPic),
-      );
     });
 
     lightbox.on('openingAnimationStart', () => {
@@ -251,19 +300,36 @@ onMounted(() => {
       wViewerStateStore.ifViewerOpen = true;
       console.log('openingAnimationStart');
     });
-
     lightbox.on('closingAnimationStart', () => {
       document.removeEventListener('keydown', handleViewerKeyDown);
+    })
+    lightbox.on('closingAnimationEnd', () => {
       isLightboxOpen.value = false;
       wViewerStateStore.ifViewerOpen = false;
-      console.log('closingAnimationStart');
-      if (thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
-        thisPicElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      console.log('closingAnimationEnd');
+      allPicElement = document.querySelectorAll('img');
+      thisPicElement = Array.from(allPicElement).find((img: any) =>
+        img.src.includes(thisPic),
+      );
+      console.log('closing Element', thisPicElement, thisPic);
+      nextTick(() => {
+        if (thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
+          thisPicElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+        }
+      });
     });
-
     lightbox.init();
   }
+}
+
+// 首次加载
+onMounted(() => {
+  initLightBox();
+  pageChageObserver();
+  console.log('onMounted');
 });
 
 onBeforeUnmount(() => {

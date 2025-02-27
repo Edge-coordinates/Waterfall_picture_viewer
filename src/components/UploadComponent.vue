@@ -8,9 +8,9 @@
         <div class="text-center text-xl" style="color: #999;">支持多选</div>
     </div>
     <!-- <input type="file" @change="selectFile" /> -->
-    <div v-for="file in files" :key="file">
+    <!-- <div v-for="file in files" :key="file">
       {{ file }}
-    </div>
+    </div> -->
   </div>
 </template>
 

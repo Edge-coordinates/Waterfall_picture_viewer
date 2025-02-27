@@ -15,6 +15,7 @@ export const useWViewerStateStore = defineStore('wViewerState', {
     thisPicDecode: '',
     openPicNum: -1,
     imgs: [] as WImage[],
+    lastPageTunningCommand  : '',
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2,

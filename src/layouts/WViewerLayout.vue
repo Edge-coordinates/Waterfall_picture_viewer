@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-unused-vars -->
 <template>
   <div v-if="viewerName === 'photoswipe'">
-    <WviewerPhotoswipe :imgs="list" :next-page="nextPage" :pre-page="prePage" />
+    <WviewerPhotoswipe :page="page" :imgs="list" :next-page="nextPage" :pre-page="prePage" />
   </div>
   <div v-else-if="viewerName === 'biggerpicture'">
     <WviewerBiggerpicture :imgs="list" />
@@ -77,7 +77,7 @@ async function picInfoInit(fpath: Array<String> | String) {
   }
   const theTaskName = Array.isArray(fpath) ? fpath[0] : fpath;
   const paths = cloneDeep(fpath);
-  window.myToolAPI.traverseFolderAsync(paths, pFormat, vFormat, perPageNum);
+  window.myToolAPI.traverseFolderAsync(paths, pFormat, vFormat, perPageNum, setStore.sortMethod);
   window.myToolAPI.onAsyncImageLinksAppend((event, taskName, paths) => {
     console.log(paths);
     if (taskName === theTaskName) {
@@ -99,14 +99,11 @@ wViewerStateStore.$subscribe((mutation, state) => {
 const inputPageValue = ref(1);
 
 async function getList({ page, pageSize }) {
-  return wViewerStateStore.imgs.slice((page - 1) * pageSize, page * pageSize);
-  // .map((element) => {
-  //   // Processing of each element?
-  //   return {
-  //     src: element,
-  //     id: element
-  //   }
-  // });
+  return wViewerStateStore.imgs.slice((page - 1) * pageSize, page * pageSize)
+  .map((img, index) => ({
+    ...img,
+    key: (page - 1) * pageSize + index, // Computes increasing key
+  }));
 }
 
 const page = ref(1);
