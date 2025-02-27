@@ -29,6 +29,7 @@ export const useSettingStore = defineStore('setting', {
     // cycleUpdate: false,
     cycleUpdate: true,
     viewerName: 'photoswipe',
+    autoPositioning: true,
     singlePageLoop: false,
     globalDropFolderOpen: true,
     sortMethod: 'name-asc',

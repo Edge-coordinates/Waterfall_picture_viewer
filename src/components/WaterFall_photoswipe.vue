@@ -307,19 +307,21 @@ function initLightBox() {
       isLightboxOpen.value = false;
       wViewerStateStore.ifViewerOpen = false;
       console.log('closingAnimationEnd');
-      allPicElement = document.querySelectorAll('img');
-      thisPicElement = Array.from(allPicElement).find((img: any) =>
-        img.src.includes(thisPic),
-      );
-      console.log('closing Element', thisPicElement, thisPic);
-      nextTick(() => {
-        if (thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
-          thisPicElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
-        }
-      });
+      if(setStore.autoPositioning) {
+        allPicElement = document.querySelectorAll('img');
+        thisPicElement = Array.from(allPicElement).find((img: any) =>
+          img.src.includes(thisPic),
+        );
+        console.log('closing Element', thisPicElement, thisPic);
+        nextTick(() => {
+          if (thisPicElement && !isElementPartiallyInWindow(thisPicElement)) {
+            thisPicElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            });
+          }
+        });
+      }
     });
     lightbox.init();
   }

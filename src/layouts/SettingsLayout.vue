@@ -129,6 +129,26 @@
                 <div class="text-h4 q-mb-md">查看器设置</div>
                 <!-- <h3 class="text-xl font-semibold"></h3> -->
                 <!-- sortMethod Choose -->
+                <q-toggle
+                    :label="`自动定位：${setStore.autoPositioning}`"
+                    v-model="setStore.autoPositioning"
+                />
+                <q-icon round dense flat color="primary" name="mdi-help"
+                    ><q-tooltip class="bg-purple text-body2" :offset="[10, 10]">
+                      自动定位：退出查看器后自动定位到播放的图片的位置
+                    </q-tooltip></q-icon>
+                <q-btn
+                  class="float-right"
+                  round
+                  dense
+                  flat
+                  icon="mdi-content-save"
+                  @click="saveData('autoPositioning')"
+                  ><q-tooltip class="bg-purple text-body2" :offset="[10, 10]">
+                    保存设置
+                  </q-tooltip>
+                </q-btn>
+                <br />
                 <q-select
                   v-model="setStore.sortMethod"
                   :options="setStore.sortMethodOptions"
@@ -342,6 +362,10 @@ function saveData(id) {
       break;
     case 'sortMethod':
       window.storeAPI.set('sortMethod', setStore.sortMethod);
+      break;
+      
+    case 'autoPositioning':
+      window.storeAPI.set('autoPositioning', setStore.autoPositioning);
       break;
     case 'globalDropFolderOpen':
       window.storeAPI.set(

@@ -38,6 +38,9 @@ async function initData() {
   if (tmpdata !== undefined && tmpdata !== null) setStore.sortMethod = tmpdata
   tmpdata = await window.storeAPI.get('globalDropFolderOpen')
   if (tmpdata !== undefined && tmpdata !== null) setStore.globalDropFolderOpen = tmpdata
+  tmpdata = await window.storeAPI.get('autoPositioning')
+  if (tmpdata !== undefined && tmpdata !== null) setStore.autoPositioning = tmpdata
+  
   console.log('APP setData inited!')
 }
 
